@@ -1,78 +1,186 @@
-from selenium.common import TimeoutException, ElementClickInterceptedException
-from selenium.webdriver.common.by import By
+from selenium.common import TimeoutException
+from selenium.webdriver import ActionChains, Keys
+from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 
 
 class BaseObject:
-    """Базовый класс для веб-объектов."""
+    """Базовый класс для взаимодействия с веб-элементами."""
 
-    # Локаторы
-    PAGE_PRELOADER_LOCATOR = (By.XPATH, '//div[@id="preloader" and contains(@class, "--active")]')
+    driver: WebDriver
+    root: WebDriver | WebElement
 
-    def __init__(self, root):
-        self.root = root
-
-    @property
-    def driver(self):
-        if isinstance(self.root, WebElement):
-            return self.root.parent
-
-        return self.root
-
-    # Геттеры
-    def get_element(self, locator, timeout=10):
+    def get_element(self, locator, timeout=10, poll_frequency=0.1) -> WebElement:
         """Возвращает видимый элемент."""
 
-        return WebDriverWait(self.root, timeout).until(
+        return WebDriverWait(self.root, timeout, poll_frequency).until(
             EC.visibility_of_element_located(locator)
         )
 
-    def get_text(self, locator, timeout=10):
-        """Возвращает текст видимого элемента."""
+    def get_elements(self, locator, timeout=10, poll_frequency=0.1) -> list[WebElement]:
+        """Возвращает все видимые элементы."""
 
-        return self.get_element(locator, timeout).text
+        return WebDriverWait(self.root, timeout, poll_frequency).until(
+            EC.visibility_of_all_elements_located(locator)
+        )
 
-    def is_visible(self, locator, timeout=10):
+    def get_text(self, locator, timeout=10, poll_frequency=0.1) -> str:
+        """Возвращает очищенный текст видимого элемента."""
+
+        return self.get_element(locator, timeout, poll_frequency).text.strip()
+
+    def get_direct_text(self, locator, timeout=10, poll_frequency=0.1) -> str:
+        """Возвращает очищенный текст элемента без текста его потомков."""
+
+        return self.driver.execute_script(
+            '''
+            return Array.from(arguments[0].childNodes)
+                .filter(node => node.nodeType === Node.TEXT_NODE)
+                .map(node => node.textContent)
+                .join('')
+                .replace(/\\s+/g, ' ');
+            ''',
+            self.get_element(locator, timeout, poll_frequency),
+        ).strip()
+
+    def wait_until_not_visible(self, locator, timeout=10, poll_frequency=0.1):
+        """Ожидает, пока элемент перестанет отображаться."""
+
+        WebDriverWait(self.root, timeout, poll_frequency).until(
+            EC.invisibility_of_element_located(locator)
+        )
+
+    def is_visible(self, locator, timeout=1, poll_frequency=0.1) -> bool:
         """Проверяет, отображается ли элемент на странице."""
 
         try:
-            self.get_element(locator, timeout)
+            self.get_element(locator, timeout, poll_frequency)
             return True
         except TimeoutException:
             return False
 
-    # Действия
-    def click_element(self, locator, timeout=10):
+    def is_not_visible(self, locator, timeout=1, poll_frequency=0.1) -> bool:
+        """Проверяет, не отображается ли элемент на странице."""
+
+        try:
+            self.wait_until_not_visible(locator, timeout, poll_frequency)
+            return True
+        except TimeoutException:
+            return False
+
+    def get_present_element(
+        self, locator, timeout=10, poll_frequency=0.1
+    ) -> WebElement:
+        return WebDriverWait(self.root, timeout, poll_frequency).until(
+            EC.presence_of_element_located(locator)
+        )
+
+    def is_present(self, locator, timeout=1, poll_frequency=0.1) -> bool:
+        try:
+            self.get_present_element(locator, timeout, poll_frequency)
+            return True
+        except TimeoutException:
+            return False
+
+    def scroll_to_element(self, locator, timeout=10, poll_frequency=0.1):
+        """Прокручивает страницу к указанному элементу."""
+
+        self.driver.execute_script(
+            '''
+            arguments[0].scrollIntoView({
+                block: "center", 
+                inline: "nearest", 
+                behavior: "instant"
+            });
+            ''',
+            self.get_element(locator, timeout, poll_frequency),
+        )
+
+    def click_element(self, locator, timeout=10, poll_frequency=0.1):
         """Нажимает на указанный элемент."""
 
-        WebDriverWait(self.root, timeout).until(
+        self.scroll_to_element(locator, timeout, poll_frequency)
+
+        WebDriverWait(self.root, timeout, poll_frequency).until(
             EC.element_to_be_clickable(locator)
         ).click()
 
-    def safe_click_element(self, locator, timeout=10, attempts=5):
-        """"Нажимает на указанный элемент после исчезновения прелоадера."""
+    def hover_element(self, locator, timeout=10, poll_frequency=0.1):
+        """Наводит курсор на указанный элемент."""
 
-        for attempt in range(attempts):
-            self.wait_preloader_disappear()
-            try:
-                self.click_element(locator, timeout)
-                return
-            except ElementClickInterceptedException:
-                if attempt == attempts - 1:
-                    raise
+        self.scroll_to_element(locator, timeout, poll_frequency)
 
-    def enter_text(self, locator, value, timeout=10):
+        ActionChains(self.driver).move_to_element(
+            self.get_element(locator, timeout, poll_frequency)
+        ).perform()
+
+    def enter_text(self, locator, value, timeout=10, poll_frequency=0.1):
         """Вводит текст в указанное поле."""
 
-        WebDriverWait(self.root, timeout).until(
-            EC.element_to_be_clickable(locator)
-        ).send_keys(value)
+        self.scroll_to_element(locator, timeout, poll_frequency)
 
-    def wait_preloader_disappear(self, timeout=10):
-        """Ждёт исчезновения прелоадера."""
+        element = self.get_element(locator, timeout, poll_frequency)
+        element.clear()
+        element.send_keys(value)
 
-        WebDriverWait(self.driver, timeout).until(
-            EC.invisibility_of_element_located(self.PAGE_PRELOADER_LOCATOR)
+    def enter_text_and_submit(self, locator, value, timeout=10, poll_frequency=0.1):
+        """Вводит текст в указанное поле и нажимает кнопку Return."""
+
+        self.enter_text(locator, value, timeout, poll_frequency)
+        self.get_element(locator, timeout, poll_frequency).send_keys(Keys.RETURN)
+
+    def drag_element_by_offset(
+        self, locator, x_offset, y_offset, timeout=10, poll_frequency=0.1
+    ):
+        """Перетаскивает указанный элемент на заданное смещение."""
+
+        self.scroll_to_element(locator, timeout, poll_frequency)
+
+        ActionChains(self.driver).click_and_hold(
+            self.get_element(locator, timeout, poll_frequency)
+        ).move_by_offset(x_offset, y_offset).release().perform()
+
+    def drag_horizontally_to_element(
+        self,
+        container_locator,
+        target_locator,
+        drag_step=200,
+        max_attempts=10,
+        tolerance=1,
+        timeout=10,
+        poll_frequency=0.1,
+    ):
+        for _ in range(max_attempts):
+            container_rect = self.get_element(
+                container_locator, timeout, poll_frequency
+            ).rect
+            target_rect = self.get_present_element(
+                target_locator, timeout, poll_frequency
+            ).rect
+
+            container_left = container_rect['x']
+            container_right = container_left + container_rect['width']
+
+            target_left = target_rect['x']
+            target_right = target_left + target_rect['width']
+
+            if target_left < container_left - tolerance:
+                x_offset = drag_step
+            elif target_right > container_right + tolerance:
+                x_offset = -drag_step
+            else:
+                return
+
+            self.drag_element_by_offset(
+                container_locator,
+                x_offset=x_offset,
+                y_offset=0,
+                timeout=timeout,
+                poll_frequency=poll_frequency,
+            )
+
+        raise TimeoutException(
+            f'Element could not be dragged into view: {target_locator}.'
         )

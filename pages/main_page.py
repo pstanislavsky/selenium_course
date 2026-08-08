@@ -1,8 +1,8 @@
-from base.base_page import BasePage
+from base.pages.base_page import BasePage
 
 
 class MainPage(BasePage):
     """Главная страница интернет-магазина."""
 
     # Данные
-    PAGE_URL = 'https://www.torrefacto.ru/'
+    URL = 'https://www.torrefacto.ru/'

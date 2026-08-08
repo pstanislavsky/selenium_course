@@ -1,26 +1,47 @@
 from selenium.webdriver.common.by import By
 
-from base.base_object import BaseObject
+from base.components.base_component import BaseComponent
+from components.catalog_menu import CatalogMenu
+from utils.xpath import has_class
 
-class Header(BaseObject):
+
+class Header(BaseComponent):
     """Компонент хедера страниц интернет-магазина."""
 
-    # Локаторы
-    CATALOG_BUTTON_LOCATOR = (By.XPATH, './/div[@id="catalog-menu-button"]')
-    COFFEE_BUTTON_LOCATOR = (By.XPATH, './/span[text()="Кофе"]')
-    CART_BUTTON_LOCATOR = (By.XPATH, './/a[@class="cart-content"]')
+    # Locators
+    CATALOG_MENU_LOCATOR = (By.XPATH, f'.//li[{has_class("catalog-menu")}]')
+    LOGIN_BUTTON_LOCATOR = (
+        By.XPATH,
+        f'.//a[{has_class("user-profile__login-link--desktop")}]',
+    )
+    PROFILE_BUTTON_LOCATOR = (
+        By.XPATH,
+        f'.//a[{has_class("user-profile__link--desktop")}]',
+    )
+    FAVORITES_BUTTON_LOCATOR = (By.XPATH, f'.//a[{has_class("favorites-link")}]')
+    CART_BUTTON_LOCATOR = (By.XPATH, './/a[@data-entity = "header-cart"]')
+    CART_COUNTER_LOCATOR = (By.XPATH, './/span[@data-block-id = "counter"]')
 
-    # Действия
-    def click_catalog_button(self):
-        self.safe_click_element(self.CATALOG_BUTTON_LOCATOR)
+    # Components
+    @property
+    def catalog_menu(self):
+        return CatalogMenu(self, self.CATALOG_MENU_LOCATOR)
 
-    def click_cart_button(self):
-        self.safe_click_element(self.CART_BUTTON_LOCATOR)
+    # Properties
+    @property
+    def is_logged_in(self):
+        return self.is_visible(self.PROFILE_BUTTON_LOCATOR)
 
-    # Сценарии
-    def open_coffee_catalog(self):
-        self.click_catalog_button()
-        self.safe_click_element(self.COFFEE_BUTTON_LOCATOR)
+    @property
+    def cart_counter(self):
+        if self.is_visible(self.CART_COUNTER_LOCATOR):
+            return int(self.get_text(self.CART_COUNTER_LOCATOR))
+        else:
+            return 0
+
+    # Actions
+    def open_login_modal(self):
+        self.click_element(self.LOGIN_BUTTON_LOCATOR)
 
     def open_cart(self):
-        self.click_cart_button()
+        self.click_element(self.CART_BUTTON_LOCATOR)
