@@ -10,6 +10,10 @@ def text_equals(text):
     return f'normalize-space() = "{text}"'
 
 
+def svg_icon(icon_class):
+    return f'*[local-name() = "svg"][{has_class(icon_class)}]'
+
+
 def primary_or_fallback(primary_condition, fallback_condition, primary_search_path):
     return (
         f'{primary_condition}'

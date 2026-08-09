@@ -1,13 +1,13 @@
-import time
+from time import sleep
 
 from pages.catalog_pages.roasted_coffee_catalog_page import RoastedCoffeeCatalogPage
 from pages.checkout_page import CheckoutPage
 from pages.main_page import MainPage
 from pages.cart_page import CartPage
-from utils.parsers import parse_int
 
 email = 'hivernampbtwjcxvrb@kjkpc.net'
 password = 'qwerty'
+discount_code = 'NEW15'
 
 
 def test_debug(set_up):
@@ -58,10 +58,10 @@ def test_debug(set_up):
     )
     print(('География:', coffee_catalog.applied_filters.is_applied('География')))
 
-    # coffee_catalog.applied_filters.remove('Вид кофе')
-    # coffee_catalog.filters.coffee_type.check_option('Арабика')
-    # coffee_catalog.applied_filters.remove('Обжарка')
-    # coffee_catalog.filters.roast.check_option('Темная обжарка')
+    coffee_catalog.applied_filters.remove('Вид кофе')
+    coffee_catalog.filters.coffee_type.check_option('Арабика')
+    coffee_catalog.applied_filters.remove('Обжарка')
+    coffee_catalog.filters.roast.check_option('Темная обжарка')
     # coffee_catalog.applied_filters.clear_all()
     # coffee_catalog.filters.roast.check_option('Средняя обжарка')
     # coffee_catalog.filters.suitable_for.check_option('Для фильтра')
@@ -196,8 +196,21 @@ def test_debug(set_up):
             if hasattr(gift, attr):
                 print(f'Плюс: "{attr}" = "{getattr(gift, attr)}"')
     print(cart.products[-1].name, 'через индекс!')
-    print(['Итого:', cart.total_price, cart.total_quantity, cart.total_weight])
-    cart.clear()
     print('Корзина пуста:', cart.is_empty)
+    cart.apply_discount(discount_code)
+    cart.remove_discount(discount_code)
+    cart.apply_discount(discount_code)
+    print(
+        [
+            'Итого:',
+            cart.total_quantity,
+            cart.total_weight,
+            ('Base:', cart.base_price),
+            ('Discount:', cart.discount),
+            ('Total:', cart.total_price),
+        ]
+    )
+    # cart.clear()
 
-    # cart.proceed_to_checkout()
+    cart.proceed_to_checkout()
+    sleep(2)

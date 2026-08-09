@@ -2,7 +2,7 @@ from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
 
 from base.components.base_component import BaseComponent
-from utils.xpath import has_class, has_text
+from utils.xpath import has_class, has_text, svg_icon
 
 
 class AppliedFilters(BaseComponent):
@@ -41,13 +41,13 @@ class AppliedFilters(BaseComponent):
                 f'Applied filter was not found: filter_name="{filter_name}", option="{option}".'
             )
 
-        control_locator = (
+        remove_button_locator = (
             By.XPATH,
-            f'{chip_locator[1]}' f'//*[local-name() = "use"]',
+            f'{chip_locator[1]}//{svg_icon("icon-close-round")}',
         )
 
         self.drag_horizontally_to_element(self.SCROLLABLE_LIST_LOCATOR, chip_locator)
-        self.click_element(control_locator)
+        self.click_element(remove_button_locator)
         self.wait_page_stable()
 
     def clear_all(self):
@@ -56,13 +56,13 @@ class AppliedFilters(BaseComponent):
                 'Clear-all button was not found. There may be no applied filters.'
             )
 
-        control_locator = (
+        clear_button_locator = (
             By.XPATH,
-            f'{self.CLEAR_ALL_CHIP_LOCATOR[1]}' f'//*[local-name() = "use"]',
+            f'{self.CLEAR_ALL_CHIP_LOCATOR[1]}//{svg_icon("icon-close-round")}',
         )
 
         self.drag_horizontally_to_element(
             self.SCROLLABLE_LIST_LOCATOR, self.CLEAR_ALL_CHIP_LOCATOR
         )
-        self.click_element(control_locator)
+        self.click_element(clear_button_locator)
         self.wait_page_stable()
