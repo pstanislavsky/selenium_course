@@ -213,4 +213,14 @@ def test_debug(set_up):
     # cart.clear()
 
     cart.proceed_to_checkout()
+    print(
+        [
+            'Чекаунт:',
+            checkout_page.total_quantity,
+            ('Base:', checkout_page.base_price),
+            ('Discount:', checkout_page.discount),
+            ('Delivery:', checkout_page.delivery),
+            ('Total:', checkout_page.total_price),
+        ]
+    )
     sleep(2)
