@@ -2,7 +2,16 @@ import re
 
 
 def parse_int(text, suffix=None) -> int:
-    value = text.strip()
+    minus_sign_translation = str.maketrans(
+        {
+            '\u2012': '-',
+            '\u2013': '-',
+            '\u2014': '-',
+            '\u2212': '-',
+        }
+    )
+
+    value = text.strip().translate(minus_sign_translation)
 
     if suffix is not None:
         value = value.removesuffix(suffix)

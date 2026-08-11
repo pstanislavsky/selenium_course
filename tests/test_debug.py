@@ -202,7 +202,7 @@ def test_debug(set_up):
     cart.apply_discount(discount_code)
     print(
         [
-            'Итого:',
+            'Корзина:',
             cart.total_quantity,
             cart.total_weight,
             ('Base:', cart.base_price),
