@@ -47,6 +47,20 @@ class CheckoutPage(BasePage):
     def total_price(self):
         return parse_int(self.get_text(self.TOTAL_PRICE_LOCATOR), suffix='₽')
 
+    @property
+    def full_name(self):
+        return self.get_element(self.FULL_NAME_INPUT_LOCATOR).get_attribute('value')
+
+    @property
+    def email(self):
+        return self.get_element(self.EMAIL_INPUT_LOCATOR).get_attribute('value')
+
+    @property
+    def phone(self):
+        return self.get_element(self.PHONE_INPUT_LOCATOR).get_attribute('value')
+
     # Actions
     def fill_personal_info(self, full_name, email, phone):
-        pass
+        self.enter_text(self.FULL_NAME_INPUT_LOCATOR, full_name)
+        self.enter_text(self.EMAIL_INPUT_LOCATOR, email)
+        self.enter_text(self.PHONE_INPUT_LOCATOR, phone)

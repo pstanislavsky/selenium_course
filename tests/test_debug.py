@@ -1,5 +1,7 @@
 from time import sleep
 
+from faker import Faker
+
 from pages.catalog_pages.roasted_coffee_catalog_page import RoastedCoffeeCatalogPage
 from pages.checkout_page import CheckoutPage
 from pages.main_page import MainPage
@@ -8,6 +10,7 @@ from pages.cart_page import CartPage
 email = 'hivernampbtwjcxvrb@kjkpc.net'
 password = 'qwerty'
 discount_code = 'NEW15'
+fake = Faker(locale='ru_RU')
 
 
 def test_debug(set_up):
@@ -34,7 +37,7 @@ def test_debug(set_up):
     # coffee_catalog.filters.origin.check_option('Африка')
     coffee_catalog.filters.origin.check_option('Лат. Америка')
     # coffee_catalog.filters.origin.check_option('Азия')
-    # coffee_catalog.filters.processing_method.check_option('Сухая')
+    coffee_catalog.filters.processing_method.check_option('Сухая')
     # coffee_catalog.filters.brewing_method.check_option('Фильтр-кофе')
     coffee_catalog.filters.brewing_method.check_option('Эспрессо')
     coffee_catalog.filters.coffee_type.check_option('Арабика')
@@ -97,6 +100,10 @@ def test_debug(set_up):
             (
                 coffee_catalog.filters.origin.title,
                 coffee_catalog.filters.origin.checked_options,
+            ),
+            (
+                coffee_catalog.filters.processing_method.title,
+                coffee_catalog.filters.processing_method.checked_options,
             ),
             (
                 coffee_catalog.filters.brewing_method.title,
@@ -215,12 +222,27 @@ def test_debug(set_up):
     cart.proceed_to_checkout()
     print(
         [
-            'Чекаунт:',
+            'Чекаут:',
             checkout_page.total_quantity,
             ('Base:', checkout_page.base_price),
             ('Discount:', checkout_page.discount),
             ('Delivery:', checkout_page.delivery),
             ('Total:', checkout_page.total_price),
+        ]
+    )
+    print(
+        [
+            ('Имя:', checkout_page.full_name),
+            ('Почта:', checkout_page.email),
+            ('Телефон:', checkout_page.phone),
+        ]
+    )
+    checkout_page.fill_personal_info(fake.name(), fake.email(), fake.phone_number())
+    print(
+        [
+            ('Имя:', checkout_page.full_name),
+            ('Почта:', checkout_page.email),
+            ('Телефон:', checkout_page.phone),
         ]
     )
     sleep(2)
