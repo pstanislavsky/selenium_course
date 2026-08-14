@@ -250,4 +250,7 @@ def test_debug(set_up):
             ('Телефон:', checkout_page.phone),
         ]
     )
+    print(('Город:', checkout_page.city.selected_option))
+    checkout_page.city.select_option('Санкт-Петербург')
+    print(('Город:', checkout_page.city.selected_option))
     sleep(2)
