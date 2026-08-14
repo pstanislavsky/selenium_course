@@ -24,6 +24,7 @@ class RoastedCoffeeCatalogProductCard(BaseCatalogProductCard):
     )
     GAS_DROPDOWN_LOCATOR = (By.XPATH, f'.//div[{has_class("option-gas")}]')
     GRIND_DROPDOWN_LOCATOR = (By.XPATH, f'.//div[{has_class("option-mill")}]')
+    DROPDOWN_OPTION_LOCATOR = (By.XPATH, f'.//button[@data-action = "set-option"]')
 
     # Components
     @property
@@ -37,11 +38,15 @@ class RoastedCoffeeCatalogProductCard(BaseCatalogProductCard):
 
     @property
     def gas(self):
-        return DropdownSelector(self, self.GAS_DROPDOWN_LOCATOR)
+        return DropdownSelector(
+            self, self.GAS_DROPDOWN_LOCATOR, self.DROPDOWN_OPTION_LOCATOR
+        )
 
     @property
     def grind(self):
-        return DropdownSelector(self, self.GRIND_DROPDOWN_LOCATOR)
+        return DropdownSelector(
+            self, self.GRIND_DROPDOWN_LOCATOR, self.DROPDOWN_OPTION_LOCATOR
+        )
 
     # Properties
     @property

@@ -7,10 +7,14 @@ from pages.checkout_page import CheckoutPage
 from pages.main_page import MainPage
 from pages.cart_page import CartPage
 
-email = 'hivernampbtwjcxvrb@kjkpc.net'
+fake = Faker(locale='ru_RU')
+
+login = 'hivernampbtwjcxvrb@kjkpc.net'
 password = 'qwerty'
 discount_code = 'NEW15'
-fake = Faker(locale='ru_RU')
+full_name = fake.name()
+email = fake.email()
+phone = fake.phone_number()
 
 
 def test_debug(set_up):
@@ -22,7 +26,7 @@ def test_debug(set_up):
 
     main_page.open()
     main_page.cookie_banner.accept_cookie_consent()
-    # main_page.log_in(email, password)
+    # main_page.log_in(login, password)
 
     main_page.header.catalog_menu.open_roasted_coffee_catalog()
     # coffee_catalog.filters.roast.check_option('Средняя обжарка')
@@ -237,7 +241,8 @@ def test_debug(set_up):
             ('Телефон:', checkout_page.phone),
         ]
     )
-    checkout_page.fill_personal_info(fake.name(), fake.email(), fake.phone_number())
+    print(('Номер телефона:', phone))
+    checkout_page.fill_personal_info(full_name, email, phone)
     print(
         [
             ('Имя:', checkout_page.full_name),

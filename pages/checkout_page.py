@@ -49,15 +49,30 @@ class CheckoutPage(BasePage):
 
     @property
     def full_name(self):
-        return self.get_element(self.FULL_NAME_INPUT_LOCATOR).get_attribute('value')
+        value = self.get_element(self.FULL_NAME_INPUT_LOCATOR).get_attribute('value')
+
+        if not value:
+            return None
+
+        return value
 
     @property
     def email(self):
-        return self.get_element(self.EMAIL_INPUT_LOCATOR).get_attribute('value')
+        value = self.get_element(self.EMAIL_INPUT_LOCATOR).get_attribute('value')
+
+        if not value:
+            return None
+
+        return value
 
     @property
     def phone(self):
-        return self.get_element(self.PHONE_INPUT_LOCATOR).get_attribute('value')
+        value = self.get_element(self.PHONE_INPUT_LOCATOR).get_attribute('value')
+
+        if not value:
+            return None
+
+        return value
 
     # Actions
     def fill_personal_info(self, full_name, email, phone):
