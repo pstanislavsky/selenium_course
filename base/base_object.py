@@ -61,15 +61,6 @@ class BaseObject:
         except TimeoutException:
             return False
 
-    def is_not_visible(self, locator, timeout=1, poll_frequency=0.1) -> bool:
-        """Проверяет, не отображается ли элемент на странице."""
-
-        try:
-            self.wait_until_not_visible(locator, timeout, poll_frequency)
-            return True
-        except TimeoutException:
-            return False
-
     def get_present_element(
         self, locator, timeout=10, poll_frequency=0.1
     ) -> WebElement:

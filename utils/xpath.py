@@ -2,6 +2,10 @@ def has_class(class_name):
     return f'contains(concat(" ", normalize-space(@class), " "), " {class_name} ")'
 
 
+def has_classes(*class_names):
+    return ' and '.join(has_class(class_name) for class_name in class_names)
+
+
 def has_text(text):
     return f'contains(normalize-space(), "{text}")'
 

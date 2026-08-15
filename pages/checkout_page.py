@@ -23,13 +23,13 @@ class CheckoutPage(BasePage):
         By.XPATH,
         f'//div[@data-type = "location"]' f'//div[{has_class("form-dropdown")}]',
     )
-    DROPDOWN_OPTION_LOCATOR = (By.XPATH, './/div[@role = "option"]')
+    CITY_DROPDOWN_OPTION_LOCATOR = (By.XPATH, './/div[@role = "option"]')
 
     # Components
     @property
     def city(self):
         return SearchableDropdownSelector(
-            self, self.CITY_DROPDOWN_LOCATOR, self.DROPDOWN_OPTION_LOCATOR
+            self, self.CITY_DROPDOWN_LOCATOR, self.CITY_DROPDOWN_OPTION_LOCATOR
         )
 
     # Properties
@@ -89,7 +89,11 @@ class CheckoutPage(BasePage):
         return value
 
     # Actions
-    def fill_personal_info(self, full_name, email, phone):
+    def fill_personal_information(self, full_name, email, phone):
         self.enter_text(self.FULL_NAME_INPUT_LOCATOR, full_name)
         self.enter_text(self.EMAIL_INPUT_LOCATOR, email)
         self.enter_text(self.PHONE_INPUT_LOCATOR, phone)
+
+    def select_city(self, city_name):
+        self.city.select_option(city_name)
+        self.wait_page_stable()

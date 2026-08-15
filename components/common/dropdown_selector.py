@@ -49,6 +49,9 @@ class DropdownSelector(BaseComponent):
 
         option_locator = self._get_option_locator(option)
 
+        if not self.is_visible(option_locator):
+            raise ValueError(f'Dropdown option "{option}" was not found.')
+
         if not self.get_element(option_locator).is_enabled():
             raise ElementNotInteractableException(
                 f'Dropdown option "{option}" is disabled and cannot be selected.'

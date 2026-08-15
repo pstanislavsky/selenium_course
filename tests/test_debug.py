@@ -17,6 +17,52 @@ email = fake.email()
 phone = fake.phone_number()
 
 
+def test_fast_debug(set_up):
+    driver = set_up
+    main_page = MainPage(driver)
+    coffee_catalog = RoastedCoffeeCatalogPage(driver)
+    cart = CartPage(driver)
+    checkout_page = CheckoutPage(driver)
+
+    main_page.open()
+    main_page.cookie_banner.accept_cookie_consent()
+
+    main_page.header.catalog_menu.open_roasted_coffee_catalog()
+    card = coffee_catalog.products.get_card_by_name('Азиатская смесь')
+    card.package_size.select_option('250 г')
+    card.grind.select_option('Средний')
+    card.add_to_cart()
+    card.set_quantity('5')
+
+    product_page = card.open()
+    product_page.package_size.select_option('500 г')
+    product_page.grind.select_option('В зернах')
+    product_page.gas.select_option('С азотом')
+    product_page.add_to_cart()
+    product_page.set_quantity('5')
+
+    product_page.header.open_cart()
+    for card in cart.products:
+        card.set_quantity('10')
+    cart.apply_discount(discount_code)
+
+    cart.proceed_to_checkout()
+    checkout_page.fill_personal_information(full_name, email, phone)
+    print(
+        [
+            ('Имя:', checkout_page.full_name),
+            ('Почта:', checkout_page.email),
+            ('Телефон:', checkout_page.phone),
+        ]
+    )
+    print(('Город:', checkout_page.city.selected_option))
+    checkout_page.select_city('Санкт-Петербург')
+    print(('Город:', checkout_page.city.selected_option))
+    checkout_page.select_city('Екатеринбург')
+    print(('Город:', checkout_page.city.selected_option))
+    sleep(2)
+
+
 def test_debug(set_up):
     driver = set_up
     main_page = MainPage(driver)
@@ -171,7 +217,7 @@ def test_debug(set_up):
         ]
     )
 
-    coffee_catalog.header.open_cart()
+    product_page.header.open_cart()
     for card in cart.products:
         card.increase_quantity()
         card.decrease_quantity()
@@ -242,7 +288,7 @@ def test_debug(set_up):
         ]
     )
     print(('Номер телефона:', phone))
-    checkout_page.fill_personal_info(full_name, email, phone)
+    checkout_page.fill_personal_information(full_name, email, phone)
     print(
         [
             ('Имя:', checkout_page.full_name),
@@ -251,6 +297,8 @@ def test_debug(set_up):
         ]
     )
     print(('Город:', checkout_page.city.selected_option))
-    checkout_page.city.select_option('Санкт-Петербург')
+    checkout_page.select_city('Санкт-Петербург')
+    print(('Город:', checkout_page.city.selected_option))
+    checkout_page.select_city('Екатеринбург')
     print(('Город:', checkout_page.city.selected_option))
     sleep(2)
