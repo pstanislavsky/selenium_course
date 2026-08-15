@@ -57,8 +57,28 @@ def test_fast_debug(set_up):
     )
     print(('Город:', checkout_page.city.selected_option))
     checkout_page.select_city('Санкт-Петербург')
+    print(
+        [
+            'Чекаут:',
+            checkout_page.summary.total_quantity,
+            ('Base:', checkout_page.summary.base_price),
+            ('Discount:', checkout_page.summary.discount),
+            ('Delivery:', checkout_page.summary.delivery),
+            ('Total:', checkout_page.summary.total_price),
+        ]
+    )
     print(('Город:', checkout_page.city.selected_option))
     checkout_page.select_city('Екатеринбург')
+    print(
+        [
+            'Чекаут:',
+            checkout_page.summary.total_quantity,
+            ('Base:', checkout_page.summary.base_price),
+            ('Discount:', checkout_page.summary.discount),
+            ('Delivery:', checkout_page.summary.delivery),
+            ('Total:', checkout_page.summary.total_price),
+        ]
+    )
     print(('Город:', checkout_page.city.selected_option))
     sleep(2)
 
@@ -273,11 +293,11 @@ def test_debug(set_up):
     print(
         [
             'Чекаут:',
-            checkout_page.total_quantity,
-            ('Base:', checkout_page.base_price),
-            ('Discount:', checkout_page.discount),
-            ('Delivery:', checkout_page.delivery),
-            ('Total:', checkout_page.total_price),
+            checkout_page.summary.total_quantity,
+            ('Base:', checkout_page.summary.base_price),
+            ('Discount:', checkout_page.summary.discount),
+            ('Delivery:', checkout_page.summary.delivery),
+            ('Total:', checkout_page.summary.total_price),
         ]
     )
     print(
