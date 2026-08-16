@@ -9,17 +9,17 @@ from utils.xpath import has_text
 
 
 class RadioSelector(BaseComponent):
-    def __init__(self, parent, root_locator, option_locator, option_text_locator):
+    def __init__(self, parent, root_locator, option_locator, option_name_locator):
         super().__init__(parent, root_locator)
         self.option_locator = option_locator
-        self.option_text_locator = option_text_locator
+        self.option_name_locator = option_name_locator
 
     # Locators
     def _get_option_radio_locator(self, option):
         return (
             By.XPATH,
             f'{self.option_locator[1]}'
-            f'[{self.option_text_locator[1]}[{has_text(option)}]]'
+            f'[{self.option_name_locator[1]}[{has_text(option)}]]'
             f'//input[@type = "radio"]',
         )
 
@@ -27,18 +27,18 @@ class RadioSelector(BaseComponent):
         return (
             By.XPATH,
             f'{self.option_locator[1]}'
-            f'[{self.option_text_locator[1]}[{has_text(option)}]]'
+            f'[{self.option_name_locator[1]}[{has_text(option)}]]'
             f'//label',
         )
 
     # Properties
     @property
     def selected_option(self):
-        for option in self.get_elements(self.option_text_locator):
-            option_text = option.text.strip()
+        for option_name in self.get_elements(self.option_name_locator):
+            option_name = option_name.text.strip()
 
-            if self.is_option_selected(option_text):
-                return option_text
+            if self.is_option_selected(option_name):
+                return option_name
 
         return None
 
@@ -55,6 +55,11 @@ class RadioSelector(BaseComponent):
 
     # Actions
     def select_option(self, option):
+        option_label_locator = self._get_option_label_locator(option)
+
+        if not self.is_visible(option_label_locator):
+            raise ValueError(f'Radio option "{option}" was not found.')
+
         if self.is_option_selected(option):
             return
 
@@ -63,7 +68,7 @@ class RadioSelector(BaseComponent):
                 f'Radio option "{option}" is disabled and cannot be selected.'
             )
 
-        self.click_element(self._get_option_label_locator(option))
+        self.click_element(option_label_locator)
 
         if not self.is_option_selected(option):
             raise WebDriverException(

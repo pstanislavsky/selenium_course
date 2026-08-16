@@ -80,6 +80,30 @@ def test_fast_debug(set_up):
         ]
     )
     print(('Город:', checkout_page.city.selected_option))
+    print(
+        'Изначально:',
+        (
+            checkout_page.delivery.selected_option,
+            checkout_page.delivery.selected_option_price,
+        ),
+    )
+    checkout_page.select_delivery_method('СДЭК', 'Курьер')
+    print(
+        'После выбора СДЭКа:',
+        (
+            checkout_page.delivery.selected_option,
+            checkout_page.delivery.selected_option_price,
+        ),
+    )
+    sleep(2)
+    checkout_page.select_delivery_method('Яндекс Доставка', 'Пункты выдачи')
+    print(
+        'После выбора Яндекс Доставки:',
+        (
+            checkout_page.delivery.selected_option,
+            checkout_page.delivery.selected_option_price,
+        ),
+    )
     sleep(2)
 
 

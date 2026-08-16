@@ -1,12 +1,12 @@
 from base.components.base_cart_gift_card import BaseCartGiftCard
-from utils.parsers import parse_int
+from utils.parsers import parse_integer
 
 
 class TeaCartGiftCard(BaseCartGiftCard):
     # Properties
     @property
     def package_size(self):
-        return parse_int(
+        return parse_integer(
             self.get_text(self._get_option_value_locator('Упаковка')), suffix='г'
         )
 

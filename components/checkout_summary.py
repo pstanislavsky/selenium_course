@@ -1,7 +1,7 @@
 from selenium.webdriver.common.by import By
 
 from base.components.base_component import BaseComponent
-from utils.parsers import parse_int
+from utils.parsers import parse_integer
 from utils.xpath import has_classes
 
 
@@ -24,12 +24,12 @@ class CheckoutSummary(BaseComponent):
 
     @property
     def base_price(self):
-        return parse_int(self.get_text(self.BASE_PRICE_LOCATOR), suffix='₽')
+        return parse_integer(self.get_text(self.BASE_PRICE_LOCATOR), suffix='₽')
 
     @property
     def discount(self):
         if self.is_visible(self.DISCOUNT_LOCATOR):
-            return abs(parse_int(self.get_text(self.DISCOUNT_LOCATOR), suffix='₽'))
+            return abs(parse_integer(self.get_text(self.DISCOUNT_LOCATOR), suffix='₽'))
 
         return 0
 
@@ -40,17 +40,19 @@ class CheckoutSummary(BaseComponent):
         if value == 'Бесплатно':
             return 0
 
-        return parse_int(value, suffix='₽')
+        return parse_integer(value, suffix='₽')
 
     @property
     def total_price(self):
-        return parse_int(self.get_text(self.TOTAL_PRICE_LOCATOR), suffix='₽')
+        return parse_integer(self.get_text(self.TOTAL_PRICE_LOCATOR), suffix='₽')
 
     # Actions
     def wait_until_recalculated(self, appearance_timeout=2, disappearance_timeout=10):
-        if not self.is_visible(self.LOADING_INDICATOR_LOCATOR, appearance_timeout):
+        if not self.is_visible(
+            self.LOADING_INDICATOR_LOCATOR, timeout=appearance_timeout
+        ):
             return
 
         self.wait_until_not_visible(
-            self.LOADING_INDICATOR_LOCATOR, disappearance_timeout
+            self.LOADING_INDICATOR_LOCATOR, timeout=disappearance_timeout
         )

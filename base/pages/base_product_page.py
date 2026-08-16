@@ -2,17 +2,17 @@ from selenium.webdriver.common.by import By
 
 from base.pages.base_page import BasePage
 from components.common.quantity_selector import QuantitySelector
-from utils.parsers import parse_int, parse_by_pattern
+from utils.parsers import parse_integer, parse_by_pattern
 from utils.xpath import has_class, has_text, text_equals
 
 
 class BaseProductPage(BasePage):
-    # Data
-    PRICE_PATTERN = r'\d[\d\s]*'
-
     def __init__(self, driver, url):
         super().__init__(driver)
         self.URL = url
+
+    # Data
+    PRICE_PATTERN = r'\d[\d\s]*'
 
     # Locators
     NAME_LOCATOR = (By.XPATH, f'.//h1[{has_class("product-card__name")}]')
@@ -49,7 +49,7 @@ class BaseProductPage(BasePage):
 
     @property
     def price(self):
-        return parse_int(
+        return parse_integer(
             parse_by_pattern(self.get_text(self.PRICE_LOCATOR), self.PRICE_PATTERN)
         )
 

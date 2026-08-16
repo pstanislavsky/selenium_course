@@ -18,7 +18,7 @@ class RoastedCoffeeCatalogProductCard(BaseCatalogProductCard):
         By.XPATH,
         f'.//div[{has_class("item-offers__offer")}]',
     )
-    PACKAGE_SIZE_OPTION_TEXT_LOCATOR = (
+    PACKAGE_SIZE_OPTION_NAME_LOCATOR = (
         By.XPATH,
         f'.//span[{has_class("item-offers__label-text")}]',
     )
@@ -33,7 +33,7 @@ class RoastedCoffeeCatalogProductCard(BaseCatalogProductCard):
             self,
             self.PACKAGE_SIZE_SELECTOR_LOCATOR,
             self.PACKAGE_SIZE_OPTION_LOCATOR,
-            self.PACKAGE_SIZE_OPTION_TEXT_LOCATOR,
+            self.PACKAGE_SIZE_OPTION_NAME_LOCATOR,
         )
 
     @property

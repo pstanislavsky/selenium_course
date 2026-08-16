@@ -5,7 +5,7 @@ from components.products.collections.cart_gift_collection import CartGiftCollect
 from components.products.collections.cart_product_collection import (
     CartProductCollection,
 )
-from utils.parsers import parse_int
+from utils.parsers import parse_integer
 from utils.xpath import has_class, text_equals, svg_icon
 
 
@@ -60,19 +60,19 @@ class CartPage(BasePage):
         if self.is_empty:
             return 0
 
-        return parse_int(self.get_text(self.TOTAL_WEIGHT_LOCATOR), suffix='г')
+        return parse_integer(self.get_text(self.TOTAL_WEIGHT_LOCATOR), suffix='г')
 
     @property
     def base_price(self):
         if self.is_empty:
             return 0
 
-        return parse_int(self.get_text(self.BASE_PRICE_LOCATOR), suffix='₽')
+        return parse_integer(self.get_text(self.BASE_PRICE_LOCATOR), suffix='₽')
 
     @property
     def discount(self):
         if self.is_visible(self.DISCOUNT_LOCATOR):
-            return abs(parse_int(self.get_text(self.DISCOUNT_LOCATOR), suffix='₽'))
+            return abs(parse_integer(self.get_text(self.DISCOUNT_LOCATOR), suffix='₽'))
 
         return 0
 
@@ -81,7 +81,7 @@ class CartPage(BasePage):
         if self.is_empty:
             return 0
 
-        return parse_int(self.get_text(self.TOTAL_PRICE_LOCATOR), suffix='₽')
+        return parse_integer(self.get_text(self.TOTAL_PRICE_LOCATOR), suffix='₽')
 
     # Actions
     def clear(self):

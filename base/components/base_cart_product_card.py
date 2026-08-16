@@ -1,7 +1,7 @@
 from selenium.webdriver.common.by import By
 
 from base.components.base_cart_item_card import BaseCartItemCard
-from utils.parsers import parse_int
+from utils.parsers import parse_integer
 from utils.xpath import has_class
 
 
@@ -17,7 +17,7 @@ class BaseCartProductCard(BaseCartItemCard):
     # Properties
     @property
     def price_per_unit(self):
-        return parse_int(self.get_text(self.PRICE_PER_UNIT_LOCATOR), '₽ / шт.')
+        return parse_integer(self.get_text(self.PRICE_PER_UNIT_LOCATOR), '₽ / шт.')
 
     # Actions
     def save_for_later(self):

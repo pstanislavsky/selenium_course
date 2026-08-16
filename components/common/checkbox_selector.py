@@ -9,17 +9,17 @@ from utils.xpath import has_text
 
 
 class CheckboxSelector(BaseComponent):
-    def __init__(self, parent, root_locator, option_locator, option_text_locator):
+    def __init__(self, parent, root_locator, option_locator, option_name_locator):
         super().__init__(parent, root_locator)
         self.option_locator = option_locator
-        self.option_text_locator = option_text_locator
+        self.option_name_locator = option_name_locator
 
     # Locators
     def _get_option_checkbox_locator(self, option):
         return (
             By.XPATH,
             f'{self.option_locator[1]}'
-            f'[{self.option_text_locator[1]}[{has_text(option)}]]'
+            f'[{self.option_name_locator[1]}[{has_text(option)}]]'
             f'//input[@type = "checkbox"]',
         )
 
@@ -27,7 +27,7 @@ class CheckboxSelector(BaseComponent):
         return (
             By.XPATH,
             f'{self.option_locator[1]}'
-            f'[{self.option_text_locator[1]}[{has_text(option)}]]'
+            f'[{self.option_name_locator[1]}[{has_text(option)}]]'
             f'//label',
         )
 
@@ -36,11 +36,11 @@ class CheckboxSelector(BaseComponent):
     def checked_options(self):
         checked_options = []
 
-        for option in self.get_elements(self.option_text_locator):
-            option_text = option.text.strip()
+        for option in self.get_elements(self.option_name_locator):
+            option_name = option.text.strip()
 
-            if self.is_option_checked(option_text):
-                checked_options.append(option_text)
+            if self.is_option_checked(option_name):
+                checked_options.append(option_name)
 
         return checked_options
 
@@ -57,6 +57,11 @@ class CheckboxSelector(BaseComponent):
 
     # Actions
     def check_option(self, option):
+        option_label_locator = self._get_option_label_locator(option)
+
+        if not self.is_visible(option_label_locator):
+            raise ValueError(f'Checkbox option "{option}" was not found.')
+
         if self.is_option_checked(option):
             return
 
@@ -65,7 +70,7 @@ class CheckboxSelector(BaseComponent):
                 f'Checkbox option "{option}" is disabled and cannot be checked.'
             )
 
-        self.click_element(self._get_option_label_locator(option))
+        self.click_element(option_label_locator)
 
         if not self.is_option_checked(option):
             raise WebDriverException(
@@ -73,6 +78,11 @@ class CheckboxSelector(BaseComponent):
             )
 
     def uncheck_option(self, option):
+        option_label_locator = self._get_option_label_locator(option)
+
+        if not self.is_visible(option_label_locator):
+            raise ValueError(f'Checkbox option "{option}" was not found.')
+
         if not self.is_option_checked(option):
             return
 
@@ -81,7 +91,7 @@ class CheckboxSelector(BaseComponent):
                 f'Checkbox option "{option}" is disabled and cannot be unchecked.'
             )
 
-        self.click_element(self._get_option_label_locator(option))
+        self.click_element(option_label_locator)
 
         if self.is_option_checked(option):
             raise WebDriverException(

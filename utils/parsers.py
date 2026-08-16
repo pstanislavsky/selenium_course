@@ -1,7 +1,11 @@
 import re
 
 
-def parse_int(text, suffix=None) -> int:
+def normalize_text(text) -> str:
+    return ' '.join(text.split())
+
+
+def parse_integer(text, suffix=None) -> int:
     minus_sign_translation = str.maketrans(
         {
             '\u2012': '-',

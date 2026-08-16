@@ -12,12 +12,12 @@ from utils.xpath import has_class
 class BasePage(BaseObject):
     """Базовый класс для страниц интернет-магазина."""
 
-    # Data
-    URL = None
-
     def __init__(self, driver):
         self.driver = driver
         self.root = driver
+
+    # Data
+    URL = None
 
     # Locators
     PRELOADER_LOCATOR = (

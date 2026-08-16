@@ -8,7 +8,7 @@ from utils.xpath import has_class
 class CheckboxFilter(BaseFilter):
     # Locators
     OPTION_LOCATOR = (By.XPATH, f'.//div[{has_class("smart-filter__value")}]')
-    OPTION_TEXT_LOCATOR = (
+    OPTION_NAME_LOCATOR = (
         By.XPATH,
         f'.//span[{has_class("smart-filter__label-text")}]',
     )
@@ -20,7 +20,7 @@ class CheckboxFilter(BaseFilter):
             self,
             self.MENU_LOCATOR,
             self.OPTION_LOCATOR,
-            self.OPTION_TEXT_LOCATOR,
+            self.OPTION_NAME_LOCATOR,
         )
 
     # Properties

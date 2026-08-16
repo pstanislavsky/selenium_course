@@ -8,11 +8,6 @@ from utils.xpath import has_text, has_class
 
 
 class BaseProductCollection(BaseComponent):
-    # Data
-    CARD_ID_ATTRIBUTE = None
-    CARD_NAME_LINK_CLASS = None
-    CARD_CLASS_MAP = None
-
     def __len__(self):
         return self.count
 
@@ -22,6 +17,11 @@ class BaseProductCollection(BaseComponent):
     def __iter__(self):
         for card in self.get_all_cards():
             yield card
+
+    # Data
+    CARD_ID_ATTRIBUTE = None
+    CARD_NAME_LINK_CLASS = None
+    CARD_CLASS_MAP = None
 
     # Locators
     CARD_LOCATOR = None

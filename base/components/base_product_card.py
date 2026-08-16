@@ -2,7 +2,7 @@ from selenium.webdriver.common.by import By
 
 from base.components.base_component import BaseComponent
 from components.common.quantity_selector import QuantitySelector
-from utils.parsers import parse_int
+from utils.parsers import parse_integer
 
 
 class BaseProductCard(BaseComponent):
@@ -30,7 +30,7 @@ class BaseProductCard(BaseComponent):
 
     @property
     def price(self):
-        return parse_int(self.get_text(self.PRICE_LOCATOR), suffix='₽')
+        return parse_integer(self.get_text(self.PRICE_LOCATOR), suffix='₽')
 
     # Actions
     def open(self):
