@@ -50,12 +50,12 @@ def test_fast_debug(set_up):
     checkout_page.fill_personal_information(full_name, email, phone)
     print(
         [
-            ('Имя:', checkout_page.full_name),
-            ('Почта:', checkout_page.email),
-            ('Телефон:', checkout_page.phone),
+            ('Имя:', checkout_page.form.full_name),
+            ('Почта:', checkout_page.form.email),
+            ('Телефон:', checkout_page.form.phone),
         ]
     )
-    print(('Город:', checkout_page.city.selected_option))
+    print(('Город:', checkout_page.form.city.selected_option))
     checkout_page.select_city('Санкт-Петербург')
     print(
         [
@@ -67,7 +67,7 @@ def test_fast_debug(set_up):
             ('Total:', checkout_page.summary.total_price),
         ]
     )
-    print(('Город:', checkout_page.city.selected_option))
+    print(('Город:', checkout_page.form.city.selected_option))
     checkout_page.select_city('Екатеринбург')
     print(
         [
@@ -79,20 +79,20 @@ def test_fast_debug(set_up):
             ('Total:', checkout_page.summary.total_price),
         ]
     )
-    print(('Город:', checkout_page.city.selected_option))
+    print(('Город:', checkout_page.form.city.selected_option))
     print(
         'Изначально:',
         (
-            checkout_page.delivery.selected_option,
-            checkout_page.delivery.selected_option_price,
+            checkout_page.form.delivery.selected_option,
+            checkout_page.form.delivery.selected_option_price,
         ),
     )
     checkout_page.select_delivery_method('СДЭК', 'Курьер')
     print(
         'После выбора СДЭКа:',
         (
-            checkout_page.delivery.selected_option,
-            checkout_page.delivery.selected_option_price,
+            checkout_page.form.delivery.selected_option,
+            checkout_page.form.delivery.selected_option_price,
         ),
     )
     sleep(2)
@@ -100,8 +100,8 @@ def test_fast_debug(set_up):
     print(
         'После выбора Яндекс Доставки:',
         (
-            checkout_page.delivery.selected_option,
-            checkout_page.delivery.selected_option_price,
+            checkout_page.form.delivery.selected_option,
+            checkout_page.form.delivery.selected_option_price,
         ),
     )
     sleep(2)
@@ -314,6 +314,16 @@ def test_debug(set_up):
     # cart.clear()
 
     cart.proceed_to_checkout()
+    checkout_page.fill_personal_information(full_name, email, phone)
+    print(
+        [
+            ('Имя:', checkout_page.form.full_name),
+            ('Почта:', checkout_page.form.email),
+            ('Телефон:', checkout_page.form.phone),
+        ]
+    )
+    print(('Город:', checkout_page.form.city.selected_option))
+    checkout_page.select_city('Санкт-Петербург')
     print(
         [
             'Чекаут:',
@@ -324,25 +334,41 @@ def test_debug(set_up):
             ('Total:', checkout_page.summary.total_price),
         ]
     )
-    print(
-        [
-            ('Имя:', checkout_page.full_name),
-            ('Почта:', checkout_page.email),
-            ('Телефон:', checkout_page.phone),
-        ]
-    )
-    print(('Номер телефона:', phone))
-    checkout_page.fill_personal_information(full_name, email, phone)
-    print(
-        [
-            ('Имя:', checkout_page.full_name),
-            ('Почта:', checkout_page.email),
-            ('Телефон:', checkout_page.phone),
-        ]
-    )
-    print(('Город:', checkout_page.city.selected_option))
-    checkout_page.select_city('Санкт-Петербург')
-    print(('Город:', checkout_page.city.selected_option))
+    print(('Город:', checkout_page.form.city.selected_option))
     checkout_page.select_city('Екатеринбург')
-    print(('Город:', checkout_page.city.selected_option))
+    print(
+        [
+            'Чекаут:',
+            checkout_page.summary.total_quantity,
+            ('Base:', checkout_page.summary.base_price),
+            ('Discount:', checkout_page.summary.discount),
+            ('Delivery:', checkout_page.summary.delivery),
+            ('Total:', checkout_page.summary.total_price),
+        ]
+    )
+    print(('Город:', checkout_page.form.city.selected_option))
+    print(
+        'Изначально:',
+        (
+            checkout_page.form.delivery.selected_option,
+            checkout_page.form.delivery.selected_option_price,
+        ),
+    )
+    checkout_page.select_delivery_method('СДЭК', 'Курьер')
+    print(
+        'После выбора СДЭКа:',
+        (
+            checkout_page.form.delivery.selected_option,
+            checkout_page.form.delivery.selected_option_price,
+        ),
+    )
+    sleep(2)
+    checkout_page.select_delivery_method('Яндекс Доставка', 'Пункты выдачи')
+    print(
+        'После выбора Яндекс Доставки:',
+        (
+            checkout_page.form.delivery.selected_option,
+            checkout_page.form.delivery.selected_option_price,
+        ),
+    )
     sleep(2)

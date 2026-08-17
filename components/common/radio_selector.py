@@ -61,7 +61,7 @@ class RadioSelector(BaseComponent):
             raise ValueError(f'Radio option "{option}" was not found.')
 
         if self.is_option_selected(option):
-            return
+            return False
 
         if not self.is_option_enabled(option):
             raise ElementNotInteractableException(
@@ -74,3 +74,5 @@ class RadioSelector(BaseComponent):
             raise WebDriverException(
                 f'Radio option "{option}" was not selected after clicking its label.'
             )
+
+        return True

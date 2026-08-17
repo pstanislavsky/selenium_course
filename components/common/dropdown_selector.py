@@ -1,10 +1,12 @@
 from selenium.common.exceptions import (
     ElementNotInteractableException,
+    WebDriverException,
 )
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import Select
 
 from base.components.base_component import BaseComponent
+from utils.parsers import normalize_text
 from utils.xpath import has_class, has_text
 
 
@@ -26,19 +28,26 @@ class DropdownSelector(BaseComponent):
 
     # Properties
     @property
-    def is_enabled(self):
-        return self.get_element(self.TOGGLE_LOCATOR, timeout=1).is_enabled()
-
-    @property
     def selected_option(self):
         selected_option = Select(
             self.get_present_element(self.SELECT_LOCATOR)
         ).first_selected_option
 
-        return selected_option.get_property('textContent').strip()
+        return normalize_text(selected_option.get_property('textContent'))
+
+    @property
+    def is_enabled(self):
+        return self.get_element(self.TOGGLE_LOCATOR, timeout=1).is_enabled()
+
+    # Checks
+    def is_option_selected(self, option):
+        return option in self.selected_option
 
     # Actions
     def select_option(self, option):
+        if self.is_option_selected(option):
+            return False
+
         if not self.is_enabled:
             raise ElementNotInteractableException(
                 f'Dropdown control is disabled and option "{option}" cannot be selected.'
@@ -58,3 +67,10 @@ class DropdownSelector(BaseComponent):
             )
 
         self.click_element(option_locator)
+
+        if not self.is_option_selected(option):
+            raise WebDriverException(
+                f'Dropdown option "{option}" was not selected after clicking on it.'
+            )
+
+        return True

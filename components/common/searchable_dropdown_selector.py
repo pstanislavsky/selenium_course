@@ -1,4 +1,7 @@
-from selenium.common.exceptions import ElementNotInteractableException
+from selenium.common.exceptions import (
+    ElementNotInteractableException,
+    WebDriverException,
+)
 from selenium.webdriver.common.by import By
 
 from components.common.dropdown_selector import DropdownSelector
@@ -22,6 +25,9 @@ class SearchableDropdownSelector(DropdownSelector):
 
     # Actions
     def select_option(self, option):
+        if self.is_option_selected(option):
+            return False
+
         if not self.is_enabled:
             raise ElementNotInteractableException(
                 f'Dropdown control is disabled and option "{option}" cannot be selected.'
@@ -44,3 +50,10 @@ class SearchableDropdownSelector(DropdownSelector):
             )
 
         self.click_element(option_locator)
+
+        if not self.is_option_selected(option):
+            raise WebDriverException(
+                f'Dropdown option "{option}" was not selected after clicking on it.'
+            )
+
+        return True

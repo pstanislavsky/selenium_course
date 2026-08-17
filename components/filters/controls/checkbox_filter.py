@@ -37,15 +37,9 @@ class CheckboxFilter(BaseFilter):
 
     # Actions
     def check_option(self, option):
-        if self.options.is_option_checked(option):
-            return
-
-        self.options.check_option(option)
-        self.wait_page_stable()
+        if self.options.check_option(option):
+            self.wait_page_stable()
 
     def uncheck_option(self, option):
-        if not self.options.is_option_checked(option):
-            return
-
-        self.options.uncheck_option(option)
-        self.wait_page_stable()
+        if self.options.uncheck_option(option):
+            self.wait_page_stable()

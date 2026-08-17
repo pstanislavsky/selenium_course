@@ -23,7 +23,7 @@ class SwitchSelector(BaseComponent):
     # Actions
     def enable(self):
         if self.is_on:
-            return
+            return False
 
         if not self.is_enabled:
             raise ElementNotInteractableException(
@@ -37,9 +37,11 @@ class SwitchSelector(BaseComponent):
                 f'Switch control was not turned on after clicking on it.'
             )
 
+        return True
+
     def disable(self):
         if not self.is_on:
-            return
+            return False
 
         if not self.is_enabled:
             raise ElementNotInteractableException(
@@ -52,3 +54,5 @@ class SwitchSelector(BaseComponent):
             raise WebDriverException(
                 f'Switch control was not turned off after clicking on it.'
             )
+
+        return True

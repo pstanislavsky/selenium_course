@@ -63,7 +63,7 @@ class CheckboxSelector(BaseComponent):
             raise ValueError(f'Checkbox option "{option}" was not found.')
 
         if self.is_option_checked(option):
-            return
+            return False
 
         if not self.is_option_enabled(option):
             raise ElementNotInteractableException(
@@ -77,6 +77,8 @@ class CheckboxSelector(BaseComponent):
                 f'Checkbox option "{option}" was not checked after clicking its label.'
             )
 
+        return True
+
     def uncheck_option(self, option):
         option_label_locator = self._get_option_label_locator(option)
 
@@ -84,7 +86,7 @@ class CheckboxSelector(BaseComponent):
             raise ValueError(f'Checkbox option "{option}" was not found.')
 
         if not self.is_option_checked(option):
-            return
+            return False
 
         if not self.is_option_enabled(option):
             raise ElementNotInteractableException(
@@ -97,3 +99,5 @@ class CheckboxSelector(BaseComponent):
             raise WebDriverException(
                 f'Checkbox option "{option}" was not unchecked after clicking its label.'
             )
+
+        return True

@@ -30,15 +30,9 @@ class SwitchFilter(BaseComponent):
 
     # Actions
     def enable(self):
-        if self.switch.is_on:
-            return
-
-        self.switch.enable()
-        self.wait_page_stable()
+        if self.switch.enable():
+            self.wait_page_stable()
 
     def disable(self):
-        if not self.switch.is_on:
-            return
-
-        self.switch.disable()
-        self.wait_page_stable()
+        if self.switch.disable():
+            self.wait_page_stable()
