@@ -11,9 +11,10 @@ from utils.xpath import has_class, has_text
 
 
 class DropdownSelector(BaseComponent):
-    def __init__(self, parent, root_locator, option_locator):
+    def __init__(self, parent, root_locator, option_locator, option_value_attribute):
         super().__init__(parent, root_locator)
         self.option_locator = option_locator
+        self.option_value_attribute = option_value_attribute
 
     # Locators
     SELECT_LOCATOR = (By.XPATH, './/select')
@@ -41,7 +42,21 @@ class DropdownSelector(BaseComponent):
 
     # Checks
     def is_option_selected(self, option):
-        return option in self.selected_option
+        option_locator = self._get_option_locator(option)
+        option_value = self.get_present_element(option_locator).get_attribute(
+            self.option_value_attribute
+        )
+
+        if option_value is None:
+            raise WebDriverException(
+                f'Dropdown option "{option}" does not have attribute "{self.option_value_attribute}".'
+            )
+
+        selected_value = self.get_present_element(self.SELECT_LOCATOR).get_attribute(
+            'value'
+        )
+
+        return option_value == selected_value
 
     # Actions
     def select_option(self, option):
