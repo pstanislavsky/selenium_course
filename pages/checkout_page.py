@@ -33,9 +33,9 @@ class CheckoutPage(BasePage):
         self.form.set_phone(phone)
 
     def select_city(self, city_name):
-        self.form.city.select_option(city_name)
-        self.wait_page_stable()
-        self.summary.wait_until_recalculated()
+        if self.form.city.select_option(city_name):
+            self.wait_page_stable()
+            self.summary.wait_until_recalculated()
 
     def select_delivery_method(self, delivery_provider, delivery_type):
         if self.form.delivery.select_option((delivery_provider, delivery_type)):

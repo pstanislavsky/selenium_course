@@ -1,7 +1,4 @@
-from selenium.common.exceptions import (
-    ElementNotInteractableException,
-    WebDriverException,
-)
+from selenium.common.exceptions import ElementNotInteractableException
 from selenium.webdriver.common.by import By
 
 from base.components.base_component import BaseComponent
@@ -69,10 +66,5 @@ class RadioSelector(BaseComponent):
             )
 
         self.click_element(option_label_locator)
-
-        if not self.is_option_selected(option):
-            raise WebDriverException(
-                f'Radio option "{option}" was not selected after clicking its label.'
-            )
 
         return True

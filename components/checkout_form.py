@@ -15,15 +15,12 @@ class CheckoutForm(BaseComponent):
         By.XPATH,
         f'.//div[@data-type = "location"]' f'//div[{has_class("form-dropdown")}]',
     )
-    CITY_DROPDOWN_OPTION_LOCATOR = (By.XPATH, './/div[@role = "option"]')
     DELIVERY_LOCATOR = (By.XPATH, './/div[@data-entity = "delivery-block"]')
 
     # Components
     @property
     def city(self):
-        return SearchableDropdownSelector(
-            self, self.CITY_DROPDOWN_LOCATOR, self.CITY_DROPDOWN_OPTION_LOCATOR
-        )
+        return SearchableDropdownSelector(self, self.CITY_DROPDOWN_LOCATOR)
 
     @property
     def delivery(self):

@@ -10,7 +10,6 @@ from utils.xpath import has_class
 class RoastedCoffeeCatalogProductCard(BaseCatalogProductCard):
     # Data
     PRODUCT_PAGE_CLASS = RoastedCoffeeProductPage
-    DROPDOWN_OPTION_VALUE_ATTRIBUTE = 'data-value'
 
     # Locators
     NUMBER_LOCATOR = (By.XPATH, f'.//a[{has_class("item-number")}]')
@@ -40,19 +39,13 @@ class RoastedCoffeeCatalogProductCard(BaseCatalogProductCard):
     @property
     def gas(self):
         return DropdownSelector(
-            self,
-            self.GAS_DROPDOWN_LOCATOR,
-            self.DROPDOWN_OPTION_LOCATOR,
-            self.DROPDOWN_OPTION_VALUE_ATTRIBUTE,
+            self, self.GAS_DROPDOWN_LOCATOR, self.DROPDOWN_OPTION_LOCATOR
         )
 
     @property
     def grind(self):
         return DropdownSelector(
-            self,
-            self.GRIND_DROPDOWN_LOCATOR,
-            self.DROPDOWN_OPTION_LOCATOR,
-            self.DROPDOWN_OPTION_VALUE_ATTRIBUTE,
+            self, self.GRIND_DROPDOWN_LOCATOR, self.DROPDOWN_OPTION_LOCATOR
         )
 
     # Properties

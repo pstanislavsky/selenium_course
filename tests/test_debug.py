@@ -17,96 +17,6 @@ email = fake.email()
 phone = fake.phone_number()
 
 
-def test_fast_debug(set_up):
-    driver = set_up
-    main_page = MainPage(driver)
-    coffee_catalog = RoastedCoffeeCatalogPage(driver)
-    cart = CartPage(driver)
-    checkout_page = CheckoutPage(driver)
-
-    main_page.open()
-    main_page.cookie_banner.accept_cookie_consent()
-
-    main_page.header.catalog_menu.open_roasted_coffee_catalog()
-    card = coffee_catalog.products.get_card_by_name('Азиатская смесь')
-    card.package_size.select_option('250 г')
-    card.grind.select_option('Средний')
-    card.add_to_cart()
-    card.set_quantity('5')
-
-    product_page = card.open()
-    product_page.package_size.select_option('500 г')
-    product_page.grind.select_option('В зернах')
-    product_page.gas.select_option('С азотом')
-    product_page.add_to_cart()
-    product_page.set_quantity('5')
-
-    product_page.header.open_cart()
-    for card in cart.products:
-        card.set_quantity('10')
-    cart.apply_discount(discount_code)
-
-    cart.proceed_to_checkout()
-    checkout_page.fill_personal_information(full_name, email, phone)
-    print(
-        [
-            ('Имя:', checkout_page.form.full_name),
-            ('Почта:', checkout_page.form.email),
-            ('Телефон:', checkout_page.form.phone),
-        ]
-    )
-    print(('Город:', checkout_page.form.city.selected_option))
-    checkout_page.select_city('Санкт-Петербург')
-    print(
-        [
-            'Чекаут:',
-            checkout_page.summary.total_quantity,
-            ('Base:', checkout_page.summary.base_price),
-            ('Discount:', checkout_page.summary.discount),
-            ('Delivery:', checkout_page.summary.delivery),
-            ('Total:', checkout_page.summary.total_price),
-        ]
-    )
-    print(('Город:', checkout_page.form.city.selected_option))
-    checkout_page.select_city('Екатеринбург')
-    print(
-        [
-            'Чекаут:',
-            checkout_page.summary.total_quantity,
-            ('Base:', checkout_page.summary.base_price),
-            ('Discount:', checkout_page.summary.discount),
-            ('Delivery:', checkout_page.summary.delivery),
-            ('Total:', checkout_page.summary.total_price),
-        ]
-    )
-    print(('Город:', checkout_page.form.city.selected_option))
-    print(
-        'Изначально:',
-        (
-            checkout_page.form.delivery.selected_option,
-            checkout_page.form.delivery.selected_option_price,
-        ),
-    )
-    checkout_page.select_delivery_method('СДЭК', 'Курьер')
-    print(
-        'После выбора СДЭКа:',
-        (
-            checkout_page.form.delivery.selected_option,
-            checkout_page.form.delivery.selected_option_price,
-        ),
-    )
-    sleep(2)
-    checkout_page.select_delivery_method('Яндекс Доставка', 'Пункты выдачи')
-    print(
-        'После выбора Яндекс Доставки:',
-        (
-            checkout_page.form.delivery.selected_option,
-            checkout_page.form.delivery.selected_option_price,
-        ),
-    )
-    sleep(2)
-
-
 def test_debug(set_up):
     driver = set_up
     main_page = MainPage(driver)
@@ -336,6 +246,120 @@ def test_debug(set_up):
     )
     print(('Город:', checkout_page.form.city.selected_option))
     checkout_page.select_city('Екатеринбург')
+    print(
+        [
+            'Чекаут:',
+            checkout_page.summary.total_quantity,
+            ('Base:', checkout_page.summary.base_price),
+            ('Discount:', checkout_page.summary.discount),
+            ('Delivery:', checkout_page.summary.delivery),
+            ('Total:', checkout_page.summary.total_price),
+        ]
+    )
+    print(('Город:', checkout_page.form.city.selected_option))
+    checkout_page.select_city('Сафоново')
+    print(
+        [
+            'Чекаут:',
+            checkout_page.summary.total_quantity,
+            ('Base:', checkout_page.summary.base_price),
+            ('Discount:', checkout_page.summary.discount),
+            ('Delivery:', checkout_page.summary.delivery),
+            ('Total:', checkout_page.summary.total_price),
+        ]
+    )
+    print(('Город:', checkout_page.form.city.selected_option))
+    print(
+        'Изначально:',
+        (
+            checkout_page.form.delivery.selected_option,
+            checkout_page.form.delivery.selected_option_price,
+        ),
+    )
+    checkout_page.select_delivery_method('СДЭК', 'Курьер')
+    print(
+        'После выбора СДЭКа:',
+        (
+            checkout_page.form.delivery.selected_option,
+            checkout_page.form.delivery.selected_option_price,
+        ),
+    )
+    sleep(2)
+    checkout_page.select_delivery_method('Яндекс Доставка', 'Пункты выдачи')
+    print(
+        'После выбора Яндекс Доставки:',
+        (
+            checkout_page.form.delivery.selected_option,
+            checkout_page.form.delivery.selected_option_price,
+        ),
+    )
+    sleep(2)
+
+
+def test_fast_debug(set_up):
+    driver = set_up
+    main_page = MainPage(driver)
+    coffee_catalog = RoastedCoffeeCatalogPage(driver)
+    cart = CartPage(driver)
+    checkout_page = CheckoutPage(driver)
+
+    main_page.open()
+    main_page.cookie_banner.accept_cookie_consent()
+
+    main_page.header.catalog_menu.open_roasted_coffee_catalog()
+    card = coffee_catalog.products.get_card_by_name('Азиатская смесь')
+    card.package_size.select_option('250 г')
+    card.grind.select_option('Средний')
+    card.add_to_cart()
+    card.set_quantity('5')
+
+    product_page = card.open()
+    product_page.package_size.select_option('500 г')
+    product_page.grind.select_option('В зернах')
+    product_page.gas.select_option('С азотом')
+    product_page.add_to_cart()
+    product_page.set_quantity('5')
+
+    product_page.header.open_cart()
+    for card in cart.products:
+        card.set_quantity('10')
+    cart.apply_discount(discount_code)
+
+    cart.proceed_to_checkout()
+    checkout_page.fill_personal_information(full_name, email, phone)
+    print(
+        [
+            ('Имя:', checkout_page.form.full_name),
+            ('Почта:', checkout_page.form.email),
+            ('Телефон:', checkout_page.form.phone),
+        ]
+    )
+    print(('Город:', checkout_page.form.city.selected_option))
+    checkout_page.select_city('Санкт-Петербург')
+    print(
+        [
+            'Чекаут:',
+            checkout_page.summary.total_quantity,
+            ('Base:', checkout_page.summary.base_price),
+            ('Discount:', checkout_page.summary.discount),
+            ('Delivery:', checkout_page.summary.delivery),
+            ('Total:', checkout_page.summary.total_price),
+        ]
+    )
+    print(('Город:', checkout_page.form.city.selected_option))
+    checkout_page.select_city('Екатеринбург')
+    print(
+        [
+            'Чекаут:',
+            checkout_page.summary.total_quantity,
+            ('Base:', checkout_page.summary.base_price),
+            ('Discount:', checkout_page.summary.discount),
+            ('Delivery:', checkout_page.summary.delivery),
+            ('Total:', checkout_page.summary.total_price),
+        ]
+    )
+    print(('Город:', checkout_page.form.city.selected_option))
+    checkout_page.select_city('Сафоново')
     print(
         [
             'Чекаут:',

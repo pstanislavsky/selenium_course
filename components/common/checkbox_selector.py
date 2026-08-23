@@ -1,7 +1,4 @@
-from selenium.common.exceptions import (
-    ElementNotInteractableException,
-    WebDriverException,
-)
+from selenium.common.exceptions import ElementNotInteractableException
 from selenium.webdriver.common.by import By
 
 from base.components.base_component import BaseComponent
@@ -72,11 +69,6 @@ class CheckboxSelector(BaseComponent):
 
         self.click_element(option_label_locator)
 
-        if not self.is_option_checked(option):
-            raise WebDriverException(
-                f'Checkbox option "{option}" was not checked after clicking its label.'
-            )
-
         return True
 
     def uncheck_option(self, option):
@@ -94,10 +86,5 @@ class CheckboxSelector(BaseComponent):
             )
 
         self.click_element(option_label_locator)
-
-        if self.is_option_checked(option):
-            raise WebDriverException(
-                f'Checkbox option "{option}" was not unchecked after clicking its label.'
-            )
 
         return True

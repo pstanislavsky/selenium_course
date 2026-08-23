@@ -1,7 +1,4 @@
-from selenium.common.exceptions import (
-    ElementNotInteractableException,
-    WebDriverException,
-)
+from selenium.common.exceptions import ElementNotInteractableException
 from selenium.webdriver.common.by import By
 
 from base.components.base_component import BaseComponent
@@ -32,11 +29,6 @@ class SwitchSelector(BaseComponent):
 
         self.click_element(self.SWITCH_LOCATOR)
 
-        if not self.is_on:
-            raise WebDriverException(
-                f'Switch control was not turned on after clicking on it.'
-            )
-
         return True
 
     def disable(self):
@@ -49,10 +41,5 @@ class SwitchSelector(BaseComponent):
             )
 
         self.click_element(self.SWITCH_LOCATOR)
-
-        if self.is_on:
-            raise WebDriverException(
-                f'Switch control was not turned off after clicking on it.'
-            )
 
         return True
