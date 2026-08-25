@@ -1,4 +1,5 @@
-from selenium.common import ElementNotInteractableException
+from selenium.common.exceptions import ElementNotInteractableException
+from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 
 from components.common.dropdown_selector import DropdownSelector
@@ -31,6 +32,12 @@ class SearchableDropdownSelector(DropdownSelector):
         return option in self.selected_option
 
     # Actions
+    def close(self):
+        if self.is_open:
+            self.get_element(self.INPUT_LOCATOR).send_keys(Keys.ESCAPE)
+
+        self.wait_until_not_visible(self.MENU_LOCATOR)
+
     def select_option(self, option):
         """Selects the first option containing the given unique text fragment."""
 
@@ -47,11 +54,13 @@ class SearchableDropdownSelector(DropdownSelector):
         self.wait_until_menu_loaded()
 
         if self.is_visible(self.NO_RESULTS_INDICATOR_LOCATOR):
+            self.close()
             raise ValueError(f'Dropdown option "{option}" was not found.')
 
         option_locator = self._get_menu_option_locator(option)
 
         if not self.is_visible(option_locator):
+            self.close()
             raise ValueError(f'Dropdown option "{option}" was not found.')
 
         self.click_element(option_locator)
