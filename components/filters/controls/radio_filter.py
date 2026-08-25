@@ -37,5 +37,7 @@ class RadioFilter(BaseFilter):
 
     # Actions
     def select_option(self, option):
+        self.expand()
+
         if self.options.select_option(option):
             self.wait_page_stable()

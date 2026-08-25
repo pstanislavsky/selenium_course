@@ -32,10 +32,14 @@ class RangeFilter(BaseFilter):
 
     # Actions
     def set_min_value(self, value):
+        self.expand()
+
         self.enter_text_and_submit(self.MIN_VALUE_INPUT_LOCATOR, value)
         self.wait_page_stable()
 
     def set_max_value(self, value):
+        self.expand()
+
         self.enter_text_and_submit(self.MAX_VALUE_INPUT_LOCATOR, value)
         self.wait_page_stable()
 
@@ -44,12 +48,16 @@ class RangeFilter(BaseFilter):
         self.set_max_value(max_value)
 
     def move_min_value_slider_handle(self, offset):
+        self.expand()
+
         self.drag_element_by_offset(
             self.MIN_VALUE_SLIDER_HANDLE_LOCATOR, x_offset=offset, y_offset=0
         )
         self.wait_page_stable()
 
     def move_max_value_slider_handle(self, offset):
+        self.expand()
+
         self.drag_element_by_offset(
             self.MAX_VALUE_SLIDER_HANDLE_LOCATOR, x_offset=offset, y_offset=0
         )

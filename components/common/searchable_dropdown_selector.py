@@ -1,4 +1,4 @@
-from selenium.common import ElementNotInteractableException, NoSuchElementException
+from selenium.common import ElementNotInteractableException
 from selenium.webdriver.common.by import By
 
 from components.common.dropdown_selector import DropdownSelector
@@ -42,11 +42,13 @@ class SearchableDropdownSelector(DropdownSelector):
                 f'Dropdown control is disabled and option "{option}" cannot be selected.'
             )
 
-        if not self.is_open:
-            self.click_element(self.TOGGLE_LOCATOR)
-        self.get_element(self.MENU_LOCATOR)
+        self.open()
         self.enter_text(self.INPUT_LOCATOR, option)
         self.wait_until_menu_loaded()
+
+        if self.is_visible(self.NO_RESULTS_INDICATOR_LOCATOR):
+            raise ValueError(f'Dropdown option "{option}" was not found.')
+
         option_locator = self._get_menu_option_locator(option)
 
         if not self.is_visible(option_locator):
@@ -65,6 +67,3 @@ class SearchableDropdownSelector(DropdownSelector):
         self.wait_until_not_visible(
             self.LOADING_INDICATOR_LOCATOR, timeout=disappearance_timeout
         )
-
-        if self.is_visible(self.NO_RESULTS_INDICATOR_LOCATOR):
-            raise NoSuchElementException

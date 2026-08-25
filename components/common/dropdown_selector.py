@@ -55,6 +55,18 @@ class DropdownSelector(BaseComponent):
         ).is_selected()
 
     # Actions
+    def open(self):
+        if not self.is_open:
+            self.click_element(self.TOGGLE_LOCATOR)
+
+        self.get_element(self.MENU_LOCATOR)
+
+    def close(self):
+        if self.is_open:
+            self.click_element(self.TOGGLE_LOCATOR)
+
+        self.wait_until_not_visible(self.MENU_LOCATOR)
+
     def select_option(self, option):
         """Selects the first option containing the given unique text fragment."""
 
@@ -81,9 +93,7 @@ class DropdownSelector(BaseComponent):
                 f'Dropdown option "{option}" is disabled and cannot be selected.'
             )
 
-        if not self.is_open:
-            self.click_element(self.TOGGLE_LOCATOR)
-        self.get_element(self.MENU_LOCATOR)
+        self.open()
 
         if not self.is_visible(menu_option_locator):
             raise ValueError(f'Dropdown option "{option}" was not found.')

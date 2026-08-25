@@ -23,6 +23,10 @@ class BaseFilter(BaseComponent):
         if not self.is_expanded:
             self.click_element(self.TITLE_LOCATOR)
 
+        self.get_element(self.MENU_LOCATOR)
+
     def collapse(self):
         if self.is_expanded:
             self.click_element(self.TITLE_LOCATOR)
+
+        self.wait_until_not_visible(self.MENU_LOCATOR)
