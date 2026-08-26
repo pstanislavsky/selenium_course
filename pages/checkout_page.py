@@ -40,3 +40,8 @@ class CheckoutPage(BasePage):
     def select_delivery_method(self, delivery_provider, delivery_type):
         if self.form.delivery.select_option((delivery_provider, delivery_type)):
             self.summary.wait_until_recalculated()
+
+    def fill_courier_delivery_information(
+        self, address, delivery_date=None, delivery_time=None
+    ):
+        pass
