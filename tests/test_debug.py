@@ -284,7 +284,6 @@ def test_debug(set_up):
             checkout_page.form.delivery.selected_option_price,
         ),
     )
-    sleep(2)
     checkout_page.select_delivery_method('Яндекс Доставка', 'Пункты выдачи')
     print(
         'После выбора Яндекс Доставки:',
@@ -322,7 +321,7 @@ def test_fast_debug(set_up):
 
     product_page.header.open_cart()
     for card in cart.products:
-        card.set_quantity('10')
+        card.set_quantity('3')
     cart.apply_discount(discount_code)
 
     cart.proceed_to_checkout()
@@ -359,7 +358,7 @@ def test_fast_debug(set_up):
         ]
     )
     print(('Город:', checkout_page.form.city.selected_option))
-    checkout_page.select_city('Сафоново')
+    checkout_page.select_city('Новосибирск')
     print(
         [
             'Чекаут:',
@@ -378,6 +377,22 @@ def test_fast_debug(set_up):
             checkout_page.form.delivery.selected_option_price,
         ),
     )
+    checkout_page.select_delivery_method('Почта России', 'До отделения')
+    print(
+        'После выбора почты:',
+        (
+            checkout_page.form.delivery.selected_option,
+            checkout_page.form.delivery.selected_option_price,
+        ),
+    )
+    checkout_page.select_delivery_method('Яндекс Доставка', 'Пункты выдачи')
+    print(
+        'После выбора Яндекс Доставки:',
+        (
+            checkout_page.form.delivery.selected_option,
+            checkout_page.form.delivery.selected_option_price,
+        ),
+    )
     checkout_page.select_delivery_method('СДЭК', 'Курьер')
     print(
         'После выбора СДЭКа:',
@@ -386,13 +401,40 @@ def test_fast_debug(set_up):
             checkout_page.form.delivery.selected_option_price,
         ),
     )
-    sleep(2)
-    checkout_page.select_delivery_method('Яндекс Доставка', 'Пункты выдачи')
     print(
-        'После выбора Яндекс Доставки:',
+        'Изначальный адрес доставки:',
         (
-            checkout_page.form.delivery.selected_option,
-            checkout_page.form.delivery.selected_option_price,
+            checkout_page.form.delivery_information.address.selected_option,
+            checkout_page.form.delivery_information.zip_code,
+        ),
+    )
+    checkout_page.fill_courier_delivery_information('ул Ленина, д 10')
+    print(
+        'Адрес доставки:',
+        (
+            checkout_page.form.delivery_information.address.selected_option,
+            checkout_page.form.delivery_information.zip_code,
+        ),
+    )
+    sleep(2)
+    print(
+        'Попытка выбрать тот же адресс:',
+        checkout_page.fill_courier_delivery_information('ул Ленина, д 10'),
+    )
+    print(
+        'Адрес доставки:',
+        (
+            checkout_page.form.delivery_information.address.selected_option,
+            checkout_page.form.delivery_information.zip_code,
+        ),
+    )
+    sleep(2)
+    checkout_page.fill_courier_delivery_information('ул Пушкина, д 20')
+    print(
+        'Адрес доставки:',
+        (
+            checkout_page.form.delivery_information.address.selected_option,
+            checkout_page.form.delivery_information.zip_code,
         ),
     )
     sleep(2)

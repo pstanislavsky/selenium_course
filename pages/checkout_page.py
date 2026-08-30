@@ -42,6 +42,12 @@ class CheckoutPage(BasePage):
             self.summary.wait_until_recalculated()
 
     def fill_courier_delivery_information(
-        self, address, delivery_date=None, delivery_time=None
+        self, address, zip_code=None, delivery_date=None, delivery_time=None
     ):
-        pass
+        self.form.delivery_information.address.select_option(address)
+
+        if zip_code is not None:
+            self.form.delivery_information.set_zip_code(zip_code)
+
+        if delivery_time is not None:
+            self.form.delivery_information.delivery_time.select_option(delivery_time)
