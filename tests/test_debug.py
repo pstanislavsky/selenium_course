@@ -334,18 +334,6 @@ def test_fast_debug(set_up):
         ]
     )
     print(('Город:', checkout_page.form.city.selected_option))
-    checkout_page.select_city('Санкт-Петербург')
-    print(
-        [
-            'Чекаут:',
-            checkout_page.summary.total_quantity,
-            ('Base:', checkout_page.summary.base_price),
-            ('Discount:', checkout_page.summary.discount),
-            ('Delivery:', checkout_page.summary.delivery),
-            ('Total:', checkout_page.summary.total_price),
-        ]
-    )
-    print(('Город:', checkout_page.form.city.selected_option))
     checkout_page.select_city('Екатеринбург')
     print(
         [
@@ -359,6 +347,18 @@ def test_fast_debug(set_up):
     )
     print(('Город:', checkout_page.form.city.selected_option))
     checkout_page.select_city('Новосибирск')
+    print(
+        [
+            'Чекаут:',
+            checkout_page.summary.total_quantity,
+            ('Base:', checkout_page.summary.base_price),
+            ('Discount:', checkout_page.summary.discount),
+            ('Delivery:', checkout_page.summary.delivery),
+            ('Total:', checkout_page.summary.total_price),
+        ]
+    )
+    print(('Город:', checkout_page.form.city.selected_option))
+    checkout_page.select_city('Санкт-Петербург')
     print(
         [
             'Чекаут:',
@@ -404,7 +404,7 @@ def test_fast_debug(set_up):
     print(
         'Изначальный адрес доставки:',
         (
-            checkout_page.form.delivery_information.address.selected_option,
+            checkout_page.form.delivery_information.address.value,
             checkout_page.form.delivery_information.zip_code,
         ),
     )
@@ -412,7 +412,7 @@ def test_fast_debug(set_up):
     print(
         'Адрес доставки:',
         (
-            checkout_page.form.delivery_information.address.selected_option,
+            checkout_page.form.delivery_information.address.value,
             checkout_page.form.delivery_information.zip_code,
         ),
     )
@@ -424,16 +424,16 @@ def test_fast_debug(set_up):
     print(
         'Адрес доставки:',
         (
-            checkout_page.form.delivery_information.address.selected_option,
+            checkout_page.form.delivery_information.address.value,
             checkout_page.form.delivery_information.zip_code,
         ),
     )
     sleep(2)
-    checkout_page.fill_courier_delivery_information('ул Пушкина, д 20')
+    checkout_page.fill_courier_delivery_information('пр-кт Невский, д 100')
     print(
         'Адрес доставки:',
         (
-            checkout_page.form.delivery_information.address.selected_option,
+            checkout_page.form.delivery_information.address.value,
             checkout_page.form.delivery_information.zip_code,
         ),
     )

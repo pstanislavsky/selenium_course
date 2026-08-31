@@ -67,7 +67,7 @@ class SearchableDropdownSelector(DropdownSelector):
 
         return True
 
-    def wait_until_menu_loaded(self, appearance_timeout=2, disappearance_timeout=20):
+    def wait_until_menu_loaded(self, appearance_timeout=2, disappearance_timeout=15):
         if not self.is_visible(
             self.LOADING_INDICATOR_LOCATOR, timeout=appearance_timeout
         ):

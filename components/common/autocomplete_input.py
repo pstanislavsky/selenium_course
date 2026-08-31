@@ -1,4 +1,6 @@
+from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
 
 from base.components.base_component import BaseComponent
 from utils.parsers import normalize_text
@@ -12,12 +14,12 @@ class AutocompleteInput(BaseComponent):
     SUGGESTION_LOCATOR = (By.XPATH, f'.//div[{has_class("suggestions-suggestion")}]')
     CLEAR_BUTTON_LOCATOR = (By.XPATH, './/button[@data-action = "clear-field"]')
 
-    def _get_suggestion_locator(self, option):
-        return (By.XPATH, f'{self.SUGGESTION_LOCATOR[1]}[{has_text(option)}]')
+    def _get_suggestion_locator(self, suggestion):
+        return (By.XPATH, f'{self.SUGGESTION_LOCATOR[1]}[{has_text(suggestion)}]')
 
     # Properties
     @property
-    def selected_option(self):
+    def value(self):
         return normalize_text(
             self.get_element(self.INPUT_LOCATOR).get_attribute('value')
         )
@@ -27,26 +29,37 @@ class AutocompleteInput(BaseComponent):
         return self.is_visible(self.MENU_LOCATOR)
 
     # Checks
-    def is_option_selected(self, option):
-        return option == self.selected_option
+    def has_value(self, value):
+        return value == self.value
+
+    def is_suggestion_selected(self, suggestion):
+        return suggestion in self.value
 
     # Actions
-    def select_option(self, option):
-        if self.is_option_selected(option):
+    def close(self):
+        if self.is_open:
+            self.get_element(self.INPUT_LOCATOR).send_keys(Keys.ESCAPE)
+
+        self.wait_until_not_visible(self.MENU_LOCATOR)
+
+    def select_suggestion(self, suggestion):
+        """Selects the first suggestion containing the given unique text fragment."""
+
+        if self.is_suggestion_selected(suggestion):
             return False
 
-        self.enter_text(self.INPUT_LOCATOR, option)
-        self.get_element(self.MENU_LOCATOR)
+        self.enter_text(self.INPUT_LOCATOR, suggestion)
 
-        option_locator = self._get_suggestion_locator(option)
+        suggestion_locator = self._get_suggestion_locator(suggestion)
 
         try:
-            self.get_element(option_locator)
-        except TimeoutError:
+            self.get_element(suggestion_locator)
+        except TimeoutException:
             self.clear()
-            raise ValueError(f'Autocomplete suggestion "{option}" was not found.')
+            raise ValueError(f'Autocomplete suggestion "{suggestion}" was not found.')
 
-        self.click_element(option_locator)
+        self.click_element(suggestion_locator)
+        self.close()
 
         return True
 
@@ -54,4 +67,4 @@ class AutocompleteInput(BaseComponent):
         if self.is_visible(self.CLEAR_BUTTON_LOCATOR):
             self.click_element(self.CLEAR_BUTTON_LOCATOR)
 
-        self.wait_until_not_visible(self.MENU_LOCATOR)
+        self.close()

@@ -6,12 +6,26 @@ def has_classes(*class_names):
     return ' and '.join(has_class(class_name) for class_name in class_names)
 
 
+def xpath_literal(text):
+    """Возвращает безопасный строковый литерал XPath для произвольного текста."""
+
+    if '"' not in text:
+        return f'"{text}"'
+
+    if "'" not in text:
+        return f"'{text}'"
+
+    parts = ', \'"\', '.join(f'"{part}"' for part in text.split('"'))
+
+    return f'concat({parts})'
+
+
 def has_text(text):
-    return f'contains(normalize-space(), "{text}")'
+    return f'contains(normalize-space(), {xpath_literal(text)})'
 
 
 def text_equals(text):
-    return f'normalize-space() = "{text}"'
+    return f'normalize-space() = {xpath_literal(text)}'
 
 
 def svg_icon(icon_class):
