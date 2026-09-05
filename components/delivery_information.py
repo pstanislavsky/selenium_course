@@ -48,7 +48,3 @@ class DeliveryInformation(BaseComponent):
         return self.get_element(self.COURIER_ZIP_CODE_INPUT_LOCATOR).get_attribute(
             'value'
         )
-
-    # Actions
-    def set_zip_code(self, zip_code):
-        self.enter_text(self.COURIER_ZIP_CODE_INPUT_LOCATOR, zip_code)

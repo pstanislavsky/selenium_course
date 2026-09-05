@@ -30,10 +30,7 @@ class AutocompleteInput(BaseComponent):
 
     # Checks
     def has_value(self, value):
-        return value == self.value
-
-    def is_suggestion_selected(self, suggestion):
-        return suggestion in self.value
+        return normalize_text(value) == self.value
 
     # Actions
     def close(self):
@@ -45,7 +42,7 @@ class AutocompleteInput(BaseComponent):
     def select_suggestion(self, suggestion):
         """Selects the first suggestion containing the given unique text fragment."""
 
-        if self.is_suggestion_selected(suggestion):
+        if self.has_value(suggestion):
             return False
 
         self.enter_text(self.INPUT_LOCATOR, suggestion)

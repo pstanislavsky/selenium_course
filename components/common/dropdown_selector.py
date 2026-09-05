@@ -100,5 +100,6 @@ class DropdownSelector(BaseComponent):
             raise ValueError(f'Dropdown option "{option}" was not found.')
 
         self.click_element(menu_option_locator)
+        self.wait_until_not_visible(self.MENU_LOCATOR)
 
         return True

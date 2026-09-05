@@ -3,6 +3,7 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 
 from components.common.dropdown_selector import DropdownSelector
+from utils.parsers import normalize_text
 from utils.xpath import has_class, has_classes, has_text
 
 
@@ -29,7 +30,7 @@ class SearchableDropdownSelector(DropdownSelector):
 
     # Checks
     def is_option_selected(self, option):
-        return option in self.selected_option
+        return normalize_text(option) in self.selected_option
 
     # Actions
     def close(self):
@@ -64,6 +65,7 @@ class SearchableDropdownSelector(DropdownSelector):
             raise ValueError(f'Dropdown option "{option}" was not found.')
 
         self.click_element(option_locator)
+        self.wait_until_not_visible(self.MENU_LOCATOR)
 
         return True
 

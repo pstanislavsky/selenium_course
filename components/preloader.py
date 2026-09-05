@@ -5,7 +5,7 @@ from base.components.base_component import BaseComponent
 
 class Preloader(BaseComponent):
     # Actions
-    def wait_until_loaded(self, appearance_timeout=2, disappearance_timeout=10):
+    def wait_until_loaded(self, appearance_timeout=2, disappearance_timeout=15):
         """Ожидает исчезновение прелоадера, если он появился."""
 
         try:
