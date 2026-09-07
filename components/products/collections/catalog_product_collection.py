@@ -20,3 +20,4 @@ class CatalogProductCollection(BaseProductCollection):
         By.XPATH,
         f'.//div[{has_class("items__list-group")}]' f'//div[@data-entity = "item"]',
     )
+    EMPTY_STATE_LOCATOR = (By.XPATH, f'.//div[{has_class("items__empty")}]')

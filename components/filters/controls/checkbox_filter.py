@@ -1,7 +1,7 @@
 from selenium.webdriver.common.by import By
 
 from base.components.base_filter import BaseFilter
-from components.common.checkbox_selector import CheckboxSelector
+from components.common.checkbox_group import CheckboxGroup
 from utils.xpath import has_class
 
 
@@ -16,7 +16,7 @@ class CheckboxFilter(BaseFilter):
     # Components
     @property
     def options(self):
-        return CheckboxSelector(
+        return CheckboxGroup(
             self,
             self.MENU_LOCATOR,
             self.OPTION_LOCATOR,

@@ -47,7 +47,10 @@ class BasePage(BaseObject):
 
         self.driver.get(self.URL)
 
-    def wait_page_stable(self, seconds=2):
+    def wait_opened(self, seconds=10):
+        pass
+
+    def wait_page_stable(self, seconds=3):
         """Ждёт стабилизацию страницы указанное время."""
 
         self.preloader.wait_until_loaded(appearance_timeout=seconds)

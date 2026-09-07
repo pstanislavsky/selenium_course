@@ -47,7 +47,7 @@ class CheckoutSummary(BaseComponent):
         return parse_integer(self.get_text(self.TOTAL_PRICE_LOCATOR), suffix='₽')
 
     # Actions
-    def wait_until_recalculated(self, appearance_timeout=2, disappearance_timeout=10):
+    def wait_until_recalculated(self, appearance_timeout=3, disappearance_timeout=15):
         if not self.is_visible(
             self.LOADING_INDICATOR_LOCATOR, timeout=appearance_timeout
         ):

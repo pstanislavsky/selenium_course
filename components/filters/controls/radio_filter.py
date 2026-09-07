@@ -1,7 +1,7 @@
 from selenium.webdriver.common.by import By
 
 from base.components.base_filter import BaseFilter
-from components.common.radio_selector import RadioSelector
+from components.common.radio_group import RadioGroup
 from utils.xpath import has_class
 
 
@@ -16,7 +16,7 @@ class RadioFilter(BaseFilter):
     # Components
     @property
     def options(self):
-        return RadioSelector(
+        return RadioGroup(
             self,
             self.MENU_LOCATOR,
             self.OPTION_LOCATOR,

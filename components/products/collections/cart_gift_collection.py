@@ -31,3 +31,4 @@ class CartGiftCollection(BaseProductCollection):
         By.XPATH,
         './/div[@data-id = "gifts"]//div[@data-entity = "item"]',
     )
+    EMPTY_STATE_LOCATOR = (By.XPATH, f'.//div[@data-id = "basket-content-empty"]')

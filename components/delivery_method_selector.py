@@ -1,11 +1,11 @@
 from selenium.webdriver.common.by import By
 
-from components.common.radio_selector import RadioSelector
+from components.common.radio_group import RadioGroup
 from utils.parsers import parse_integer, normalize_text
 from utils.xpath import has_class, has_text
 
 
-class DeliveryMethodSelector(RadioSelector):
+class DeliveryMethodGroup(RadioGroup):
     def __init__(self, parent, root_locator):
         super().__init__(
             parent, root_locator, self.OPTION_LOCATOR, self.OPTION_NAME_LOCATOR

@@ -7,7 +7,7 @@ from utils.parsers import normalize_text
 from utils.xpath import has_class, has_text
 
 
-class DropdownSelector(BaseComponent):
+class Dropdown(BaseComponent):
     def __init__(self, parent, root_locator, menu_option_locator):
         super().__init__(parent, root_locator)
         self.menu_option_locator = menu_option_locator

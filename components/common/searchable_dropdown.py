@@ -2,12 +2,12 @@ from selenium.common.exceptions import ElementNotInteractableException
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 
-from components.common.dropdown_selector import DropdownSelector
+from components.common.dropdown import Dropdown
 from utils.parsers import normalize_text
 from utils.xpath import has_class, has_classes, has_text
 
 
-class SearchableDropdownSelector(DropdownSelector):
+class SearchableDropdown(Dropdown):
     def __init__(self, parent, root_locator):
         super().__init__(parent, root_locator, self.MENU_OPTION_LOCATOR)
 
@@ -69,7 +69,7 @@ class SearchableDropdownSelector(DropdownSelector):
 
         return True
 
-    def wait_until_menu_loaded(self, appearance_timeout=2, disappearance_timeout=15):
+    def wait_until_menu_loaded(self, appearance_timeout=3, disappearance_timeout=15):
         if not self.is_visible(
             self.LOADING_INDICATOR_LOCATOR, timeout=appearance_timeout
         ):

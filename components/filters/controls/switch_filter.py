@@ -1,7 +1,7 @@
 from selenium.webdriver.common.by import By
 
 from base.components.base_component import BaseComponent
-from components.common.switch_selector import SwitchSelector
+from components.common.switch import Switch
 from utils.xpath import has_class
 
 
@@ -13,7 +13,7 @@ class SwitchFilter(BaseComponent):
     # Components
     @property
     def switch(self):
-        return SwitchSelector(self, self.SWITCH_LOCATOR)
+        return Switch(self, self.SWITCH_LOCATOR)
 
     # Properties
     @property
@@ -29,10 +29,10 @@ class SwitchFilter(BaseComponent):
         return self.switch.is_on
 
     # Actions
-    def enable(self):
-        if self.switch.enable():
+    def turn_on(self):
+        if self.switch.turn_on():
             self.wait_page_stable()
 
-    def disable(self):
-        if self.switch.disable():
+    def turn_off(self):
+        if self.switch.turn_off():
             self.wait_page_stable()

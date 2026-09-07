@@ -31,7 +31,7 @@ class BaseComponent(BaseObject):
 
         self.parent.wait_until_not_visible(self.root_locator, timeout)
 
-    def wait_page_stable(self, seconds=2):
+    def wait_page_stable(self, seconds=3):
         """Ждёт стабилизацию страницы указанное время."""
 
         self.parent.wait_page_stable(seconds)

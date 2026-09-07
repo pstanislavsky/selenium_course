@@ -1,6 +1,5 @@
 from urllib.parse import urlparse
 
-from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.by import By
 
 from base.components.base_component import BaseComponent
@@ -25,6 +24,7 @@ class BaseProductCollection(BaseComponent):
 
     # Locators
     CARD_LOCATOR = None
+    EMPTY_STATE_LOCATOR = None
 
     def _get_card_locator_by_name(self, product_name):
         return (
@@ -39,10 +39,10 @@ class BaseProductCollection(BaseComponent):
     # Properties
     @property
     def count(self):
-        try:
-            return len(self.get_elements(self.CARD_LOCATOR, timeout=1))
-        except TimeoutException:
+        if self.is_visible(self.EMPTY_STATE_LOCATOR):
             return 0
+
+        return len(self.get_elements(self.CARD_LOCATOR, timeout=1))
 
     # Actions
     def get_card_by_name(self, product_name):

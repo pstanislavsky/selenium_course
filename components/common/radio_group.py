@@ -5,7 +5,7 @@ from base.components.base_component import BaseComponent
 from utils.xpath import has_text
 
 
-class RadioSelector(BaseComponent):
+class RadioGroup(BaseComponent):
     def __init__(self, parent, root_locator, option_locator, option_name_locator):
         super().__init__(parent, root_locator)
         self.option_locator = option_locator

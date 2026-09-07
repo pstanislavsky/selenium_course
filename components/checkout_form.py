@@ -1,9 +1,9 @@
 from selenium.webdriver.common.by import By
 
 from base.components.base_component import BaseComponent
-from components.common.searchable_dropdown_selector import SearchableDropdownSelector
+from components.common.searchable_dropdown import SearchableDropdown
 from components.delivery_information import DeliveryInformation
-from components.delivery_method_selector import DeliveryMethodSelector
+from components.delivery_method_selector import DeliveryMethodGroup
 from utils.xpath import has_class
 
 
@@ -22,11 +22,11 @@ class CheckoutForm(BaseComponent):
     # Components
     @property
     def city(self):
-        return SearchableDropdownSelector(self, self.CITY_DROPDOWN_LOCATOR)
+        return SearchableDropdown(self, self.CITY_DROPDOWN_LOCATOR)
 
     @property
     def delivery(self):
-        return DeliveryMethodSelector(self, self.DELIVERY_LOCATOR)
+        return DeliveryMethodGroup(self, self.DELIVERY_LOCATOR)
 
     @property
     def delivery_information(self):

@@ -31,7 +31,7 @@ def test_debug(set_up):
     coffee_catalog.filters.roast.check_option('Темная обжарка')
     # coffee_catalog.filters.suitable_for.check_option('Для фильтра')
     coffee_catalog.filters.suitable_for.check_option('Для эспрессо')
-    coffee_catalog.filters.bestseller.enable()
+    coffee_catalog.filters.bestseller.turn_on()
     coffee_catalog.filters.price.set_max_value(3000)
     # coffee_catalog.filters.price.set_range(200, 2000)
     coffee_catalog.filters.package_size.select_option('500 г')
@@ -386,7 +386,7 @@ def test_fast_debug(set_up):
         ]
     )
     print(('Город:', checkout_page.form.city.selected_option))
-    checkout_page.select_delivery_method('СДЭК', 'Курьер')
+    checkout_page.select_delivery_method('Dalli', 'Курьер')
     print(
         'СДЭК:',
         (

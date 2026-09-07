@@ -19,6 +19,7 @@ class CartProductCollection(BaseProductCollection):
         By.XPATH,
         './/div[@data-id = "items"]//div[@data-entity = "item"]',
     )
+    EMPTY_STATE_LOCATOR = (By.XPATH, f'.//div[@data-id = "basket-content-empty"]')
 
     # Actions
     def remove_all(self):

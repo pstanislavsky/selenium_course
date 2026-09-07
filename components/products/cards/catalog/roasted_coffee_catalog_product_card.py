@@ -1,8 +1,8 @@
 from selenium.webdriver.common.by import By
 
 from base.components.base_catalog_product_card import BaseCatalogProductCard
-from components.common.dropdown_selector import DropdownSelector
-from components.common.radio_selector import RadioSelector
+from components.common.dropdown import Dropdown
+from components.common.radio_group import RadioGroup
 from pages.product_pages.roasted_coffee_product_page import RoastedCoffeeProductPage
 from utils.xpath import has_class
 
@@ -29,7 +29,7 @@ class RoastedCoffeeCatalogProductCard(BaseCatalogProductCard):
     # Components
     @property
     def package_size(self):
-        return RadioSelector(
+        return RadioGroup(
             self,
             self.PACKAGE_SIZE_SELECTOR_LOCATOR,
             self.PACKAGE_SIZE_OPTION_LOCATOR,
@@ -38,13 +38,13 @@ class RoastedCoffeeCatalogProductCard(BaseCatalogProductCard):
 
     @property
     def gas(self):
-        return DropdownSelector(
+        return Dropdown(
             self, self.GAS_DROPDOWN_LOCATOR, self.DROPDOWN_OPTION_LOCATOR
         )
 
     @property
     def grind(self):
-        return DropdownSelector(
+        return Dropdown(
             self, self.GRIND_DROPDOWN_LOCATOR, self.DROPDOWN_OPTION_LOCATOR
         )
 

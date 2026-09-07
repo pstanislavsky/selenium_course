@@ -4,7 +4,7 @@ from selenium.webdriver.common.by import By
 from base.components.base_component import BaseComponent
 
 
-class SwitchSelector(BaseComponent):
+class Switch(BaseComponent):
     # Locators
     SWITCH_LOCATOR = (By.XPATH, './/input[@role = "switch"]')
 
@@ -18,7 +18,7 @@ class SwitchSelector(BaseComponent):
         return self.get_element(self.SWITCH_LOCATOR, timeout=1).is_selected()
 
     # Actions
-    def enable(self):
+    def turn_on(self):
         if self.is_on:
             return False
 
@@ -31,7 +31,7 @@ class SwitchSelector(BaseComponent):
 
         return True
 
-    def disable(self):
+    def turn_off(self):
         if not self.is_on:
             return False
 

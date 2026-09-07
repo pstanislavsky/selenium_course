@@ -1,7 +1,7 @@
 from selenium.webdriver.common.by import By
 
 from base.pages.base_product_page import BaseProductPage
-from components.common.radio_selector import RadioSelector
+from components.common.radio_group import RadioGroup
 from utils.xpath import has_class, primary_or_fallback
 
 
@@ -36,7 +36,7 @@ class RoastedCoffeeProductPage(BaseProductPage):
     # Components
     @property
     def gas(self):
-        return RadioSelector(
+        return RadioGroup(
             self,
             self.GAS_SELECTOR_LOCATOR,
             self.OPTION_LOCATOR,
@@ -45,7 +45,7 @@ class RoastedCoffeeProductPage(BaseProductPage):
 
     @property
     def grind(self):
-        return RadioSelector(
+        return RadioGroup(
             self,
             self.GRIND_SELECTOR_LOCATOR,
             self.OPTION_LOCATOR,
@@ -54,7 +54,7 @@ class RoastedCoffeeProductPage(BaseProductPage):
 
     @property
     def package_size(self):
-        return RadioSelector(
+        return RadioGroup(
             self,
             self.PACKAGE_SIZE_SELECTOR_LOCATOR,
             self.OPTION_LOCATOR,
