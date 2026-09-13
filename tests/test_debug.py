@@ -403,3 +403,38 @@ def test_fast_debug(set_up):
         ),
     )
     sleep(2)
+
+
+def test_very_fast_debug(set_up):
+    driver = set_up
+    main_page = MainPage(driver)
+    coffee_catalog = RoastedCoffeeCatalogPage(driver)
+    cart = CartPage(driver)
+    checkout_page = CheckoutPage(driver)
+
+    main_page.open()
+    main_page.cookie_banner.accept_cookie_consent()
+
+    # main_page.header.catalog_menu.open_roasted_coffee_catalog()
+    coffee_catalog.open()
+    card = coffee_catalog.products.get_card_by_name('Азиатская смесь')
+    card.package_size.select_option('1000 г')
+    card.gas.select_option('С азотом')
+    card.add_to_cart()
+    card.set_quantity('5')
+
+    coffee_catalog.header.open_cart()
+    cart.apply_discount(discount_code)
+
+    cart.proceed_to_checkout()
+    checkout_page.fill_personal_information(full_name, email, phone)
+    checkout_page.select_city('Санкт-Петербург')
+    checkout_page.select_delivery_method('Dalli', 'Курьер')
+    checkout_page.fill_courier_delivery_information('пр-кт Невский, д 100')
+    sleep(2)
+    checkout_page.form.delivery_information.address.clear()
+    sleep(2)
+    checkout_page.fill_courier_delivery_information('ул Кронштадтская, д 10')
+    sleep(2)
+    checkout_page.form.delivery_information.address.clear()
+    sleep(2)

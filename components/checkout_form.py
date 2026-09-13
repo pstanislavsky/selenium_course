@@ -1,6 +1,7 @@
 from selenium.webdriver.common.by import By
 
 from base.components.base_component import BaseComponent
+from components.common.input import Input
 from components.common.searchable_dropdown import SearchableDropdown
 from components.delivery_information import DeliveryInformation
 from components.delivery_method_selector import DeliveryMethodGroup
@@ -9,9 +10,18 @@ from utils.xpath import has_class
 
 class CheckoutForm(BaseComponent):
     # Locators
-    FULL_NAME_INPUT_LOCATOR = (By.XPATH, './/input[@id = "property_FIO"]')
-    EMAIL_INPUT_LOCATOR = (By.XPATH, './/input[@id = "property_EMAIL"]')
-    PHONE_INPUT_LOCATOR = (By.XPATH, './/input[@id = "property_PHONE"]')
+    FULL_NAME_INPUT_LOCATOR = (
+        By.XPATH,
+        f'.//div[{has_class("form-floating")}]' f'[.//input[@id = "property_FIO"]]',
+    )
+    EMAIL_INPUT_LOCATOR = (
+        By.XPATH,
+        f'.//div[{has_class("form-floating")}]' f'[.//input[@id = "property_EMAIL"]]',
+    )
+    PHONE_INPUT_LOCATOR = (
+        By.XPATH,
+        f'.//div[{has_class("form-floating")}]' f'[.//input[@id = "property_PHONE"]]',
+    )
     CITY_DROPDOWN_LOCATOR = (
         By.XPATH,
         f'.//div[@data-type = "location"]' f'//div[{has_class("form-dropdown")}]',
@@ -20,6 +30,18 @@ class CheckoutForm(BaseComponent):
     DELIVERY_INFORMATION_LOCATOR = (By.XPATH, './/div[@data-type = "delivery-info"]')
 
     # Components
+    @property
+    def full_name(self):
+        return Input(self, self.FULL_NAME_INPUT_LOCATOR)
+
+    @property
+    def email(self):
+        return Input(self, self.EMAIL_INPUT_LOCATOR)
+
+    @property
+    def phone(self):
+        return Input(self, self.PHONE_INPUT_LOCATOR)
+
     @property
     def city(self):
         return SearchableDropdown(self, self.CITY_DROPDOWN_LOCATOR)
@@ -31,41 +53,3 @@ class CheckoutForm(BaseComponent):
     @property
     def delivery_information(self):
         return DeliveryInformation(self, self.DELIVERY_INFORMATION_LOCATOR)
-
-    # Properties
-    @property
-    def full_name(self):
-        value = self.get_element(self.FULL_NAME_INPUT_LOCATOR).get_attribute('value')
-
-        if not value:
-            return None
-
-        return value
-
-    @property
-    def email(self):
-        value = self.get_element(self.EMAIL_INPUT_LOCATOR).get_attribute('value')
-
-        if not value:
-            return None
-
-        return value
-
-    @property
-    def phone(self):
-        value = self.get_element(self.PHONE_INPUT_LOCATOR).get_attribute('value')
-
-        if not value:
-            return None
-
-        return value
-
-    # Actions
-    def set_full_name(self, full_name):
-        self.enter_text(self.FULL_NAME_INPUT_LOCATOR, full_name)
-
-    def set_email(self, email):
-        self.enter_text(self.EMAIL_INPUT_LOCATOR, email)
-
-    def set_phone(self, phone):
-        self.enter_text(self.PHONE_INPUT_LOCATOR, phone)

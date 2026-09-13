@@ -2,51 +2,45 @@ from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 
-from base.components.base_component import BaseComponent
-from utils.parsers import normalize_text
+from components.common.input import Input
 from utils.xpath import has_class, has_text
 
 
-class AutocompleteInput(BaseComponent):
+class AutocompleteInput(Input):
     # Locators
-    INPUT_LOCATOR = (By.XPATH, f'.//input[{has_class("suggestions-input")}]')
-    MENU_LOCATOR = (By.XPATH, f'.//div[{has_class("suggestions-suggestions")}]')
-    SUGGESTION_LOCATOR = (By.XPATH, f'.//div[{has_class("suggestions-suggestion")}]')
-    CLEAR_BUTTON_LOCATOR = (By.XPATH, './/button[@data-action = "clear-field"]')
+    FIELD_LOCATOR = (By.XPATH, f'.//input[{has_class("suggestions-input")}]')
+    SUGGESTIONS_LOCATOR = (By.XPATH, f'.//div[{has_class("suggestions-suggestions")}]')
 
     def _get_suggestion_locator(self, suggestion):
-        return (By.XPATH, f'{self.SUGGESTION_LOCATOR[1]}[{has_text(suggestion)}]')
+        return (
+            By.XPATH,
+            f'.//div[{has_class("suggestions-suggestion")}]'
+            f'[{has_text(suggestion)}]',
+        )
 
     # Properties
     @property
-    def value(self):
-        return normalize_text(
-            self.get_element(self.INPUT_LOCATOR).get_attribute('value')
-        )
-
-    @property
     def is_open(self):
-        return self.is_visible(self.MENU_LOCATOR)
+        return self.is_visible(self.SUGGESTIONS_LOCATOR)
 
     # Checks
     def has_value(self, value):
-        return normalize_text(value) == self.value
+        return value == self.value.strip()
 
     # Actions
     def close(self):
         if self.is_open:
-            self.get_element(self.INPUT_LOCATOR).send_keys(Keys.ESCAPE)
+            self.get_element(self.FIELD_LOCATOR).send_keys(Keys.ESCAPE)
 
-        self.wait_until_not_visible(self.MENU_LOCATOR)
+        self.wait_until_not_visible(self.SUGGESTIONS_LOCATOR)
 
     def select_suggestion(self, suggestion):
         """Selects the first suggestion containing the given unique text fragment."""
 
-        if self.has_value(suggestion):
+        if not self.fill(suggestion):
             return False
 
-        self.enter_text(self.INPUT_LOCATOR, suggestion)
-
+        self.get_element(self.SUGGESTIONS_LOCATOR)
         suggestion_locator = self._get_suggestion_locator(suggestion)
 
         try:
@@ -61,7 +55,5 @@ class AutocompleteInput(BaseComponent):
         return True
 
     def clear(self):
-        if self.is_visible(self.CLEAR_BUTTON_LOCATOR):
-            self.click_element(self.CLEAR_BUTTON_LOCATOR)
-
+        super().clear()
         self.close()

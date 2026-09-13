@@ -28,9 +28,9 @@ class CheckoutPage(BasePage):
 
     # Actions
     def fill_personal_information(self, full_name, email, phone):
-        self.form.set_full_name(full_name)
-        self.form.set_email(email)
-        self.form.set_phone(phone)
+        self.form.full_name.fill(full_name)
+        self.form.email.fill(email)
+        self.form.phone.fill(phone)
 
     def select_city(self, city_name):
         if self.form.city.select_option(city_name):
@@ -43,3 +43,6 @@ class CheckoutPage(BasePage):
 
     def fill_courier_delivery_information(self, address):
         self.form.delivery_information.address.select_suggestion(address)
+
+    def select_pickup_point(self, address):
+        pass
