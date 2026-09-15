@@ -9,7 +9,8 @@ from pages.cart_page import CartPage
 
 fake = Faker(locale='ru_RU')
 
-discount_code = 'NEW15'
+promo_code_1 = 'NEW15'
+promo_code_2 = 'PROMOKODUS7'
 full_name = fake.name()
 email = fake.email()
 phone = fake.phone_number()
@@ -25,20 +26,21 @@ def test_debug(set_up):
     main_page.open()
     main_page.cookie_banner.accept_cookie_consent()
 
-    main_page.header.catalog_menu.open_roasted_coffee_catalog()
+    # main_page.header.catalog_menu.open_roasted_coffee_catalog()
+    coffee_catalog.open()
     # coffee_catalog.filters.roast.check_option('Средняя обжарка')
     # coffee_catalog.filters.roast.check_option('Самая темная обжарка')
     coffee_catalog.filters.roast.check_option('Темная обжарка')
     # coffee_catalog.filters.suitable_for.check_option('Для фильтра')
     coffee_catalog.filters.suitable_for.check_option('Для эспрессо')
-    coffee_catalog.filters.bestseller.turn_on()
+    # coffee_catalog.filters.bestseller.turn_on()
     coffee_catalog.filters.price.set_max_value(3000)
     # coffee_catalog.filters.price.set_range(200, 2000)
     coffee_catalog.filters.package_size.select_option('500 г')
-    # coffee_catalog.filters.origin.check_option('Африка')
-    coffee_catalog.filters.origin.check_option('Лат. Америка')
+    coffee_catalog.filters.origin.check_option('Африка')
+    # coffee_catalog.filters.origin.check_option('Лат. Америка')
     # coffee_catalog.filters.origin.check_option('Азия')
-    coffee_catalog.filters.processing_method.check_option('Сухая')
+    # coffee_catalog.filters.processing_method.check_option('Сухая')
     # coffee_catalog.filters.brewing_method.check_option('Фильтр-кофе')
     coffee_catalog.filters.brewing_method.check_option('Эспрессо')
     coffee_catalog.filters.coffee_type.check_option('Арабика')
@@ -205,28 +207,28 @@ def test_debug(set_up):
                 print(f'Плюс: "{attr}" = "{getattr(gift, attr)}"')
     print(cart.products[-1].name, 'через индекс!')
     print('Корзина пуста:', cart.is_empty)
-    cart.apply_discount(discount_code)
-    cart.remove_discount(discount_code)
-    cart.apply_discount(discount_code)
+    cart.promo_codes.apply(promo_code_1)
+    cart.promo_codes.remove(promo_code_1)
+    cart.promo_codes.apply(promo_code_2)
     print(
         [
             'Корзина:',
-            cart.total_quantity,
-            cart.total_weight,
-            ('Base:', cart.base_price),
-            ('Discount:', cart.discount),
-            ('Total:', cart.total_price),
+            cart.summary.total_quantity,
+            cart.summary.total_weight,
+            ('Base:', cart.summary.base_price),
+            ('Discount:', cart.summary.discount),
+            ('Total:', cart.summary.total_price),
         ]
     )
-    # cart.clear()
+    # cart.products.remove_all()
 
     cart.proceed_to_checkout()
     checkout_page.fill_personal_information(full_name, email, phone)
     print(
         [
-            ('Имя:', checkout_page.form.full_name),
-            ('Почта:', checkout_page.form.email),
-            ('Телефон:', checkout_page.form.phone),
+            ('Имя:', checkout_page.form.full_name.value),
+            ('Почта:', checkout_page.form.email.value),
+            ('Телефон:', checkout_page.form.phone.value),
         ]
     )
     print(('Город:', checkout_page.form.city.selected_option))
@@ -301,7 +303,7 @@ def test_debug(set_up):
         'Изначальный адрес доставки:',
         (
             checkout_page.form.delivery_information.address.value,
-            checkout_page.form.delivery_information.zip_code,
+            checkout_page.form.delivery_information.zip_code.value,
         ),
     )
     checkout_page.fill_courier_delivery_information('ул Ленина, д 10')
@@ -309,7 +311,7 @@ def test_debug(set_up):
         'Адрес доставки:',
         (
             checkout_page.form.delivery_information.address.value,
-            checkout_page.form.delivery_information.zip_code,
+            checkout_page.form.delivery_information.zip_code.value,
         ),
     )
     sleep(2)
@@ -321,7 +323,7 @@ def test_debug(set_up):
         'Адрес доставки:',
         (
             checkout_page.form.delivery_information.address.value,
-            checkout_page.form.delivery_information.zip_code,
+            checkout_page.form.delivery_information.zip_code.value,
         ),
     )
     sleep(2)
@@ -330,7 +332,7 @@ def test_debug(set_up):
         'Адрес доставки:',
         (
             checkout_page.form.delivery_information.address.value,
-            checkout_page.form.delivery_information.zip_code,
+            checkout_page.form.delivery_information.zip_code.value,
         ),
     )
     sleep(2)
@@ -346,7 +348,8 @@ def test_fast_debug(set_up):
     main_page.open()
     main_page.cookie_banner.accept_cookie_consent()
 
-    main_page.header.catalog_menu.open_roasted_coffee_catalog()
+    # main_page.header.catalog_menu.open_roasted_coffee_catalog()
+    coffee_catalog.open()
     card = coffee_catalog.products.get_card_by_name('Азиатская смесь')
     card.package_size.select_option('250 г')
     card.grind.select_option('Средний')
@@ -363,15 +366,15 @@ def test_fast_debug(set_up):
     product_page.header.open_cart()
     for card in cart.products:
         card.set_quantity('3')
-    cart.apply_discount(discount_code)
+    cart.promo_codes.apply(promo_code_1)
 
     cart.proceed_to_checkout()
     checkout_page.fill_personal_information(full_name, email, phone)
     print(
         [
-            ('Имя:', checkout_page.form.full_name),
-            ('Почта:', checkout_page.form.email),
-            ('Телефон:', checkout_page.form.phone),
+            ('Имя:', checkout_page.form.full_name.value),
+            ('Почта:', checkout_page.form.email.value),
+            ('Телефон:', checkout_page.form.phone.value),
         ]
     )
     checkout_page.select_city('Санкт-Петербург')
@@ -399,7 +402,7 @@ def test_fast_debug(set_up):
         'Адрес доставки:',
         (
             checkout_page.form.delivery_information.address.value,
-            checkout_page.form.delivery_information.zip_code,
+            checkout_page.form.delivery_information.zip_code.value,
         ),
     )
     sleep(2)
@@ -418,23 +421,20 @@ def test_very_fast_debug(set_up):
     # main_page.header.catalog_menu.open_roasted_coffee_catalog()
     coffee_catalog.open()
     card = coffee_catalog.products.get_card_by_name('Азиатская смесь')
-    card.package_size.select_option('1000 г')
+    card.package_size.select_option('500 г')
     card.gas.select_option('С азотом')
     card.add_to_cart()
     card.set_quantity('5')
 
     coffee_catalog.header.open_cart()
-    cart.apply_discount(discount_code)
+    cart.promo_codes.apply(promo_code_1)
 
     cart.proceed_to_checkout()
     checkout_page.fill_personal_information(full_name, email, phone)
     checkout_page.select_city('Санкт-Петербург')
-    checkout_page.select_delivery_method('Dalli', 'Курьер')
+    checkout_page.select_delivery_method('СДЭК', 'Курьер')
     checkout_page.fill_courier_delivery_information('пр-кт Невский, д 100')
-    sleep(2)
     checkout_page.form.delivery_information.address.clear()
     sleep(2)
     checkout_page.fill_courier_delivery_information('ул Кронштадтская, д 10')
-    sleep(2)
-    checkout_page.form.delivery_information.address.clear()
     sleep(2)

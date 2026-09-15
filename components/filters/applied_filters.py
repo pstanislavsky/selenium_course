@@ -34,13 +34,12 @@ class AppliedFilters(BaseComponent):
 
     # Actions
     def remove(self, filter_name, option=None):
-        chip_locator = self._get_filter_chip_locator(filter_name, option)
-
-        if not self.is_present(chip_locator):
+        if not self.is_applied(filter_name, option):
             raise NoSuchElementException(
                 f'Applied filter was not found: filter_name="{filter_name}", option="{option}".'
             )
 
+        chip_locator = self._get_filter_chip_locator(filter_name, option)
         remove_button_locator = (
             By.XPATH,
             f'{chip_locator[1]}//{svg_icon("icon-close-round")}',
